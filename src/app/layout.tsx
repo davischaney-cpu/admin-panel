@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Admin Panel",
-  description: "Modern admin dashboard starter built with Next.js",
+  title: "DavyG Admin Panel",
+  description: "Assignments, grades, and calendar in one place.",
 };
 
 export default function RootLayout({

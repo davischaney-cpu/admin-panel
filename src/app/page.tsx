@@ -99,8 +99,8 @@ export default async function Home() {
     <DashboardShell email={email} role={role} currentPath="/">
       <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Personal control center</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Overview dashboard</h2>
+          <p className="text-sm text-zinc-400">Student dashboard</p>
+          <h2 className="mt-1 text-3xl font-semibold tracking-tight">What needs attention</h2>
         </div>
         <div className="flex gap-3">
           <Link href="/calendar" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">

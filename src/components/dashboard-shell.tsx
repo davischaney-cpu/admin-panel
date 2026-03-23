@@ -11,12 +11,11 @@ type DashboardShellProps = {
 };
 
 const navItems = [
-  { label: "Overview", href: "/" },
-  { label: "Users", href: "/users" },
-  { label: "Canvas", href: "/canvas" },
+  { label: "Home", href: "/" },
   { label: "Calendar", href: "/calendar" },
-  { label: "Analytics", href: "#" },
-  { label: "Settings", href: "#" },
+  { label: "Assignments", href: "/canvas/assignments" },
+  { label: "Grades", href: "/canvas" },
+  { label: "Users", href: "/users" },
 ];
 
 export function DashboardShell({ children, email, role, currentPath = "/" }: DashboardShellProps) {
@@ -25,8 +24,9 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
       <div className="grid min-h-screen lg:grid-cols-[260px_1fr]">
         <aside className="hidden border-r border-white/10 bg-white/5 p-6 lg:block">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">Wilson</p>
-            <h1 className="mt-2 text-2xl font-semibold">Admin Panel</h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">DavyG</p>
+            <h1 className="mt-2 text-2xl font-semibold">DavyG Admin Panel</h1>
+            <p className="mt-2 text-sm text-zinc-500">Assignments, grades, and what matters next.</p>
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
@@ -35,17 +35,6 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
               const baseClasses = isActive
                 ? "bg-white text-black"
                 : "text-zinc-300 hover:bg-white/10 hover:text-white";
-
-              if (item.href === "#") {
-                return (
-                  <span
-                    key={item.label}
-                    className={`flex cursor-not-allowed items-center rounded-xl px-4 py-3 opacity-60 ${baseClasses}`}
-                  >
-                    {item.label}
-                  </span>
-                );
-              }
 
               return (
                 <Link
@@ -63,8 +52,8 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
         <section className="p-5 sm:p-8 lg:p-10">
           <div className="mb-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <div>
-              <p className="text-sm text-zinc-300">Signed in</p>
-              <p className="text-xs text-zinc-500">{email ?? "unknown user"}</p>
+              <p className="text-sm text-zinc-300">{role ? `${role[0].toUpperCase()}${role.slice(1)}` : "Account"}</p>
+              <p className="text-xs text-zinc-500">{email ?? "Signed in"}</p>
             </div>
             <UserButton appearance={clerkAppearance} userProfileMode="navigation" userProfileUrl="/user" />
           </div>

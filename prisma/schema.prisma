@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String         @id @default(cuid())
+  clerkUserId String         @unique
+  email       String         @unique
+  name        String?
+  role        Role           @default(VIEWER)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  orders      Order[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  customer    String
+  status      OrderStatus @default(PENDING)
+  totalCents  Int
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model CanvasCourse {
+  id               String             @id @default(cuid())
+  canvasCourseId   Int                @unique
+  name             String
+  courseCode       String?
+  currentScore     Float?
+  finalScore       Float?
+  hasGrade         Boolean            @default(false)
+  lastSyncedAt     DateTime           @default(now())
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  assignments      CanvasAssignment[]
+}
+
+model CanvasAssignment {
+  id                  String       @id @default(cuid())
+  canvasAssignmentId  Int          @unique
+  canvasCourseId      Int
+  courseId            String
+  name                String
+  dueAt               DateTime?
+  htmlUrl             String?
+  pointsPossible      Float?
+  submissionStatus    String?
+  workflowState       String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  course              CanvasCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([canvasCourseId])
+  @@index([dueAt])
+}
+
+model ImportedCanvasGrade {
+  id          String   @id @default(cuid())
+  canvasCourseId Int   @unique
+  grade       Float?
+  source      String   @default("better-canvas")
+  importedAt  DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum OrderStatus {
+  PAID
+  PENDING
+  REFUNDED
+}

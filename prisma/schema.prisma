@@ -67,8 +67,10 @@ model Job {
 }
 
 enum Role {
+  OWNER
   ADMIN
-  EDITOR
+  SALES
+  OPS
   VIEWER
 }
 

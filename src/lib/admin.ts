@@ -1,4 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { hasPermission, normalizeRole } from "@/lib/permissions";
 
 export async function getAdminContext() {
   const { userId, sessionClaims } = await auth();
@@ -18,10 +19,13 @@ export async function getAdminContext() {
     email = email ?? user?.primaryEmailAddress?.emailAddress ?? null;
   }
 
+  const normalizedRole = normalizeRole(role);
+
   return {
     userId,
     email,
-    role,
-    isAdmin: role === "admin",
+    role: normalizedRole,
+    isAdmin: hasPermission(normalizedRole, "viewDashboard"),
+    hasPermission: (permission: Parameters<typeof hasPermission>[1]) => hasPermission(normalizedRole, permission),
   };
 }

@@ -32,9 +32,9 @@ function leadStatusTone(status: string) {
 }
 
 export default async function DashboardPage() {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) {
+  if (!hasPermission("viewDashboard")) {
     return <UnauthorizedState email={email} />;
   }
 
@@ -176,9 +176,9 @@ export default async function DashboardPage() {
               </div>
             </div>
           </div>
-          <BillingCard />
-          <NotificationsCard />
-          <DemoDataControls />
+          {hasPermission("manageBilling") ? <BillingCard /> : null}
+          {hasPermission("manageNotifications") ? <NotificationsCard /> : null}
+          {hasPermission("useDemoTools") ? <DemoDataControls /> : null}
         </div>
       </div>
     </DashboardShell>

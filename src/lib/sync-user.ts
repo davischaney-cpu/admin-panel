@@ -10,10 +10,14 @@ type SyncUserInput = {
 
 function toRole(role?: string | null): Role {
   switch ((role ?? "").toLowerCase()) {
+    case "owner":
+      return Role.OWNER;
     case "admin":
       return Role.ADMIN;
-    case "editor":
-      return Role.EDITOR;
+    case "sales":
+      return Role.SALES;
+    case "ops":
+      return Role.OPS;
     default:
       return Role.VIEWER;
   }

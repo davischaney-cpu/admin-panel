@@ -30,9 +30,9 @@ function statusClasses(status: string) {
 }
 
 export default async function LeadsPage() {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) {
+  if (!hasPermission("viewLeads")) {
     return <UnauthorizedState email={email} />;
   }
 
@@ -71,7 +71,15 @@ export default async function LeadsPage() {
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[0.85fr_1.5fr]">
-        <CreateLeadPanel />
+        {hasPermission("createLeads") ? (
+          <CreateLeadPanel />
+        ) : (
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="text-sm text-zinc-400">Lead creation</p>
+            <h3 className="mt-1 text-xl font-semibold">Read-only access</h3>
+            <p className="mt-2 text-sm text-zinc-500">Your role can view leads, but cannot create new ones.</p>
+          </div>
+        )}
 
         <div className="space-y-6">
           <LeadsPipelineBoard leads={leads} />

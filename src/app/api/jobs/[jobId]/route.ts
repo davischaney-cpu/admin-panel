@@ -1,14 +1,13 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { requirePermission } from "@/lib/require-permission";
 
 const validStatuses = ["DRAFT", "QUOTED", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"] as const;
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ jobId: string }> }) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const gate = await requirePermission("editJobs");
+  if (!gate.ok) {
+    return NextResponse.json({ error: gate.error }, { status: gate.status });
   }
 
   const { jobId } = await params;
@@ -25,7 +24,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
 
   const status = validStatuses.includes(body.status as (typeof validStatuses)[number]) ? body.status as (typeof validStatuses)[number] : undefined;
 
-  const job = await db.job.update({
+  const lead = await db.job.update({
     where: { id: jobId },
     data: {
       ...(body.title ? { title: body.title } : {}),
@@ -41,5 +40,5 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
     include: { lead: true },
   });
 
-  return NextResponse.json({ ok: true, job });
+  return NextResponse.json({ ok: true, lead });
 }

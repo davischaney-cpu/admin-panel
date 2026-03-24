@@ -28,9 +28,9 @@ function statusClasses(status: string) {
 }
 
 export default async function JobsPage() {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) {
+  if (!hasPermission("viewJobs")) {
     return <UnauthorizedState email={email} />;
   }
 

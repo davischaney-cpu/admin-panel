@@ -15,9 +15,9 @@ function getSearchParam(value: string | string[] | undefined) {
 }
 
 export default async function CalendarPage({ searchParams }: CalendarPageProps) {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) {
+  if (!hasPermission("viewCalendar")) {
     return <UnauthorizedState email={email} />;
   }
 

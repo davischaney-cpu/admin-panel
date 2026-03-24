@@ -19,9 +19,9 @@ function formatCurrency(cents?: number | null) {
 }
 
 export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) return <UnauthorizedState email={email} />;
+  if (!hasPermission("viewLeads")) return <UnauthorizedState email={email} />;
 
   const { leadId } = await params;
   const lead = await db.lead.findUnique({
@@ -91,15 +91,23 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
             <h3 className="text-lg font-semibold">Actions</h3>
             <div className="mt-4 space-y-4">
-              <div>
-                <p className="mb-2 text-sm text-zinc-400">Status</p>
-                <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
-              </div>
-              <div>
-                <p className="mb-2 text-sm text-zinc-400">Next follow-up</p>
-                <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
-              </div>
-              <CreateJobFromLeadButton leadId={lead.id} fullName={lead.fullName} serviceType={lead.serviceType} estimatedCents={lead.estimatedCents} location={lead.location} />
+              {hasPermission("editLeads") ? (
+                <div>
+                  <p className="mb-2 text-sm text-zinc-400">Status</p>
+                  <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
+                </div>
+              ) : null}
+              {hasPermission("editLeads") ? (
+                <div>
+                  <p className="mb-2 text-sm text-zinc-400">Next follow-up</p>
+                  <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
+                </div>
+              ) : null}
+              {hasPermission("convertLeads") ? (
+                <CreateJobFromLeadButton leadId={lead.id} fullName={lead.fullName} serviceType={lead.serviceType} estimatedCents={lead.estimatedCents} location={lead.location} />
+              ) : (
+                <div className="text-sm text-zinc-500">Your role can view this lead but cannot convert it into a job.</div>
+              )}
             </div>
           </div>
         </aside>

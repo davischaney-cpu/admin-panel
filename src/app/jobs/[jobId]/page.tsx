@@ -17,9 +17,9 @@ function formatCurrency(cents?: number | null) {
 }
 
 export default async function JobDetailPage({ params }: JobDetailPageProps) {
-  const { email, role, isAdmin } = await getAdminContext();
+  const { email, role, hasPermission } = await getAdminContext();
 
-  if (!isAdmin) {
+  if (!hasPermission("viewJobs")) {
     return <UnauthorizedState email={email} />;
   }
 
@@ -76,19 +76,25 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </div>
 
         <aside className="space-y-6">
-          <JobEditForm
-            jobId={job.id}
-            initial={{
-              title: job.title,
-              serviceType: job.serviceType,
-              status: job.status,
-              scheduledFor: job.scheduledFor?.toISOString() ?? null,
-              quotedCents: job.quotedCents,
-              finalCents: job.finalCents,
-              address: job.address,
-              notes: job.notes,
-            }}
-          />
+          {hasPermission("editJobs") ? (
+            <JobEditForm
+              jobId={job.id}
+              initial={{
+                title: job.title,
+                serviceType: job.serviceType,
+                status: job.status,
+                scheduledFor: job.scheduledFor?.toISOString() ?? null,
+                quotedCents: job.quotedCents,
+                finalCents: job.finalCents,
+                address: job.address,
+                notes: job.notes,
+              }}
+            />
+          ) : (
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-zinc-500">
+              You can view this job, but your role cannot edit it.
+            </div>
+          )}
         </aside>
       </div>
     </DashboardShell>

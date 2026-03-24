@@ -1,6 +1,7 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { Role } from "@prisma/client";
 import { db } from "@/lib/db";
+import { isOwnerEmail } from "@/lib/owner";
 
 type SyncPayload = {
   clerkUserId: string;
@@ -9,7 +10,11 @@ type SyncPayload = {
   role?: string | null;
 };
 
-function toRole(role?: string | null): Role {
+function toRole(role?: string | null, email?: string | null): Role {
+  if (isOwnerEmail(email)) {
+    return Role.OWNER;
+  }
+
   switch ((role ?? "").toLowerCase()) {
     case "owner":
       return Role.OWNER;
@@ -25,7 +30,7 @@ function toRole(role?: string | null): Role {
 }
 
 export async function syncUserToDatabase(payload: SyncPayload) {
-  const role = toRole(payload.role);
+  const role = toRole(payload.role, payload.email);
 
   const existingByClerkId = await db.user.findUnique({
     where: { clerkUserId: payload.clerkUserId },

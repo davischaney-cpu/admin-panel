@@ -14,8 +14,8 @@ export function UnauthorizedState({ email }: { email?: string | null }) {
           Signed in as: <span className="font-medium">{email ?? "unknown user"}</span>
         </div>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Link href="/" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
-            Back to home
+          <Link href="/dashboard" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
+            Back to dashboard
           </Link>
           <LogoutButton />
         </div>

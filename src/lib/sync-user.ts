@@ -27,14 +27,38 @@ function toRole(role?: string | null): Role {
 export async function syncUserToDatabase(payload: SyncPayload) {
   const role = toRole(payload.role);
 
-  return db.user.upsert({
+  const existingByClerkId = await db.user.findUnique({
     where: { clerkUserId: payload.clerkUserId },
-    update: {
-      email: payload.email,
-      name: payload.name || null,
-      role,
-    },
-    create: {
+  });
+
+  if (existingByClerkId) {
+    return db.user.update({
+      where: { id: existingByClerkId.id },
+      data: {
+        email: payload.email,
+        name: payload.name || null,
+        role,
+      },
+    });
+  }
+
+  const existingByEmail = await db.user.findUnique({
+    where: { email: payload.email },
+  });
+
+  if (existingByEmail) {
+    return db.user.update({
+      where: { id: existingByEmail.id },
+      data: {
+        clerkUserId: payload.clerkUserId,
+        name: payload.name || null,
+        role,
+      },
+    });
+  }
+
+  return db.user.create({
+    data: {
       clerkUserId: payload.clerkUserId,
       email: payload.email,
       name: payload.name || null,

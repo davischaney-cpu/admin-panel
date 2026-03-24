@@ -1,3 +1,4 @@
+import { CreateLeadForm } from "@/components/create-lead-form";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
@@ -67,7 +68,10 @@ export default async function LeadsPage() {
         </div>
       </div>
 
-      <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="mt-8 grid gap-6 xl:grid-cols-[0.95fr_1.4fr]">
+        <CreateLeadForm />
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="text-zinc-400">
@@ -102,6 +106,7 @@ export default async function LeadsPage() {
               )}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </DashboardShell>

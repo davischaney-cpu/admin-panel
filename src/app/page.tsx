@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { UnauthorizedState } from "@/components/unauthorized-state";
+import { SeedDemoButton } from "@/components/seed-demo-button";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
@@ -73,13 +74,14 @@ export default async function Home() {
           <h2 className="mt-1 text-3xl font-semibold tracking-tight">Don’t let hot leads go cold</h2>
           <p className="mt-2 text-sm text-zinc-500">Track leads, follow-ups, quotes, and booked jobs without the chaos.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <Link href="/leads" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">
             Open leads
           </Link>
           <Link href="/jobs" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
             View jobs
           </Link>
+          <SeedDemoButton />
         </div>
       </header>
 

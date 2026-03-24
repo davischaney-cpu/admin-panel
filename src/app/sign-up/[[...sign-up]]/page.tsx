@@ -39,6 +39,11 @@ export default async function SignUpPage() {
           </section>
 
           <section className="relative p-3 sm:p-6">
+            <div className="mb-4 rounded-[1.5rem] border border-white/10 bg-black/20 px-6 py-5">
+              <p className="text-xs uppercase tracking-[0.3em] text-violet-300">Get started</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">Create your DavyG CRM account</h2>
+              <p className="mt-2 text-sm text-zinc-400">Set up your workspace and then assign the right company role for each teammate.</p>
+            </div>
             <div className="rounded-[1.5rem] border border-white/10 bg-black/20 p-2">
               <SignUp
                 path="/sign-up"

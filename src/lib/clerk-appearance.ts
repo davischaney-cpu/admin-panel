@@ -13,8 +13,8 @@ export const clerkAppearance = {
     rootBox: "w-full",
     cardBox: "w-full shadow-none",
     card: "bg-[#10131a]/95 shadow-none border border-white/10 rounded-[1.5rem]",
-    headerTitle: "!text-white",
-    headerSubtitle: "!text-zinc-300",
+    headerTitle: "hidden",
+    headerSubtitle: "hidden",
     socialButtonsBlockButton:
       "border border-white/10 bg-white/5 text-zinc-50 hover:bg-white/10 shadow-none",
     socialButtonsBlockButtonText: "text-zinc-50",

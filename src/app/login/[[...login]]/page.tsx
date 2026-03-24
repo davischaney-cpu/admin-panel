@@ -39,6 +39,11 @@ export default async function LoginPage() {
           </section>
 
           <section className="relative p-3 sm:p-6">
+            <div className="mb-4 rounded-[1.5rem] border border-white/10 bg-black/20 px-6 py-5">
+              <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">Welcome back</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">Sign in to DavyG CRM</h2>
+              <p className="mt-2 text-sm text-zinc-400">Access your leads, jobs, calendar, and team workspace.</p>
+            </div>
             <div className="rounded-[1.5rem] border border-white/10 bg-black/20 p-2">
               <SignIn
                 path="/login"

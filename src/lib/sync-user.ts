@@ -1,7 +1,8 @@
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Role } from "@prisma/client";
 import { db } from "@/lib/db";
 
-type SyncUserInput = {
+type SyncPayload = {
   clerkUserId: string;
   email: string;
   name?: string | null;
@@ -23,19 +24,48 @@ function toRole(role?: string | null): Role {
   }
 }
 
-export async function syncUserToDatabase(input: SyncUserInput) {
+export async function syncUserToDatabase(payload: SyncPayload) {
+  const role = toRole(payload.role);
+
   return db.user.upsert({
-    where: { clerkUserId: input.clerkUserId },
+    where: { clerkUserId: payload.clerkUserId },
     update: {
-      email: input.email,
-      name: input.name ?? null,
-      role: toRole(input.role),
+      email: payload.email,
+      name: payload.name || null,
+      role,
     },
     create: {
-      clerkUserId: input.clerkUserId,
-      email: input.email,
-      name: input.name ?? null,
-      role: toRole(input.role),
+      clerkUserId: payload.clerkUserId,
+      email: payload.email,
+      name: payload.name || null,
+      role,
     },
+  });
+}
+
+export async function syncCurrentUser() {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return null;
+  }
+
+  const user = await currentUser();
+
+  if (!user) {
+    return null;
+  }
+
+  const primaryEmail = user.primaryEmailAddress?.emailAddress;
+
+  if (!primaryEmail) {
+    return null;
+  }
+
+  return syncUserToDatabase({
+    clerkUserId: user.id,
+    email: primaryEmail,
+    name: [user.firstName, user.lastName].filter(Boolean).join(" ") || user.username,
+    role: typeof user.publicMetadata?.role === "string" ? user.publicMetadata.role : null,
   });
 }

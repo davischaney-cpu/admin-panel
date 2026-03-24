@@ -1,3 +1,4 @@
+import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { APP_ROLES, normalizeRole } from "@/lib/permissions";
@@ -17,10 +18,32 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ us
     return NextResponse.json({ error: "Invalid role." }, { status: 400 });
   }
 
-  const user = await db.user.update({
+  const user = await db.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    return NextResponse.json({ error: "User not found." }, { status: 404 });
+  }
+
+  const updatedUser = await db.user.update({
     where: { id: userId },
     data: { role },
   });
 
-  return NextResponse.json({ ok: true, user });
+  try {
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(user.clerkUserId, {
+      publicMetadata: {
+        role,
+      },
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Database role updated, but Clerk metadata sync failed.",
+        details: error instanceof Error ? error.message : "Unknown Clerk error",
+      },
+      { status: 502 },
+    );
+  }
+
+  return NextResponse.json({ ok: true, user: updatedUser });
 }

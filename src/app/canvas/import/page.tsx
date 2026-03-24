@@ -1,7 +1,6 @@
+import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { ImportGradesForm } from "@/components/import-grades-form";
 import { UnauthorizedState } from "@/components/unauthorized-state";
-import { ImportCanvasFromBrowserButton } from "@/components/import-canvas-from-browser-button";
 import { getAdminContext } from "@/lib/admin";
 
 export default async function CanvasImportPage() {
@@ -12,25 +11,17 @@ export default async function CanvasImportPage() {
   }
 
   return (
-    <DashboardShell email={email} role={role} currentPath="/canvas">
-      <header className="border-b border-white/10 pb-6">
-        <p className="text-sm text-zinc-400">Canvas integration</p>
-        <h2 className="mt-1 text-3xl font-semibold tracking-tight">Import grades</h2>
-        <p className="mt-2 text-sm text-zinc-500">
-          Save Better Canvas dashboard grades into your app.
+    <DashboardShell email={email} role={role} currentPath="/jobs">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+        <p className="text-sm text-zinc-400">Product reset</p>
+        <h2 className="mt-2 text-3xl font-semibold tracking-tight">Import flow retired</h2>
+        <p className="mt-4 max-w-2xl text-sm text-zinc-500">
+          The old Canvas import flow has been removed from the product direction. Next we’ll add lead creation, quote tracking, and follow-up actions instead.
         </p>
-      </header>
-
-      <div className="mt-8 space-y-6">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold">Import directly from Canvas in Chrome</h3>
-          <p className="mt-2 text-sm text-zinc-400">
-            Uses your local logged-in Chrome session to open each Canvas grades page and save the visible totals.
-          </p>
-          <ImportCanvasFromBrowserButton />
+        <div className="mt-6 flex gap-3">
+          <Link href="/leads" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">Open leads</Link>
+          <Link href="/jobs" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">Open jobs</Link>
         </div>
-
-        <ImportGradesForm />
       </div>
     </DashboardShell>
   );

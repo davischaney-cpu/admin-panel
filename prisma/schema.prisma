@@ -8,68 +8,57 @@ datasource db {
 }
 
 model User {
-  id          String         @id @default(cuid())
-  clerkUserId String         @unique
-  email       String         @unique
-  name        String?
-  role        Role           @default(VIEWER)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  orders      Order[]
-}
-
-model Order {
-  id          String      @id @default(cuid())
-  orderNumber String      @unique
-  customer    String
-  status      OrderStatus @default(PENDING)
-  totalCents  Int
-  userId      String?
-  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-}
-
-model CanvasCourse {
-  id               String             @id @default(cuid())
-  canvasCourseId   Int                @unique
-  name             String
-  courseCode       String?
-  currentScore     Float?
-  finalScore       Float?
-  hasGrade         Boolean            @default(false)
-  lastSyncedAt     DateTime           @default(now())
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-  assignments      CanvasAssignment[]
-}
-
-model CanvasAssignment {
-  id                  String       @id @default(cuid())
-  canvasAssignmentId  Int          @unique
-  canvasCourseId      Int
-  courseId            String
-  name                String
-  dueAt               DateTime?
-  htmlUrl             String?
-  pointsPossible      Float?
-  submissionStatus    String?
-  workflowState       String?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-  course              CanvasCourse @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  @@index([canvasCourseId])
-  @@index([dueAt])
-}
-
-model ImportedCanvasGrade {
   id          String   @id @default(cuid())
-  canvasCourseId Int   @unique
-  grade       Float?
-  source      String   @default("better-canvas")
-  importedAt  DateTime @default(now())
+  clerkUserId String   @unique
+  email       String   @unique
+  name        String?
+  role        Role     @default(VIEWER)
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Lead {
+  id            String      @id @default(cuid())
+  fullName      String
+  company       String?
+  email         String?
+  phone         String?
+  serviceType   String
+  source        LeadSource  @default(WEBSITE)
+  status        LeadStatus  @default(NEW)
+  urgency       LeadUrgency @default(MEDIUM)
+  location      String?
+  estimatedCents Int?
+  notes         String?
+  nextFollowUpAt DateTime?
+  lastContactedAt DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  jobs          Job[]
+
+  @@index([status])
+  @@index([nextFollowUpAt])
+  @@index([createdAt])
+}
+
+model Job {
+  id              String    @id @default(cuid())
+  leadId          String?
+  title           String
+  serviceType     String
+  status          JobStatus @default(SCHEDULED)
+  scheduledFor    DateTime?
+  address         String?
+  quotedCents     Int?
+  finalCents      Int?
+  notes           String?
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lead            Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([scheduledFor])
 }
 
 enum Role {
@@ -78,8 +67,36 @@ enum Role {
   VIEWER
 }
 
-enum OrderStatus {
-  PAID
-  PENDING
-  REFUNDED
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  BOOKED
+  COMPLETED
+  LOST
+}
+
+enum LeadSource {
+  WEBSITE
+  INSTAGRAM
+  FACEBOOK
+  GOOGLE
+  REFERRAL
+  PHONE
+  OTHER
+}
+
+enum LeadUrgency {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum JobStatus {
+  DRAFT
+  QUOTED
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }

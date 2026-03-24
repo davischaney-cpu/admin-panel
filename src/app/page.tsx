@@ -2,39 +2,29 @@ import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
-import { getImportedCanvasGradeMap } from "@/lib/canvas-grade-source";
 import { db } from "@/lib/db";
 import { formatDateTime } from "@/lib/format";
-import { formatScore } from "@/lib/grades";
 
-function getStatusTone(dueAt: Date | null) {
-  if (!dueAt) {
-    return {
-      label: "No due date",
-      classes: "bg-white/10 text-zinc-300 ring-1 ring-white/10",
-    };
+function formatCurrency(cents?: number | null) {
+  if (cents == null) return "—";
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(cents / 100);
+}
+
+function leadStatusTone(status: string) {
+  switch (status) {
+    case "NEW":
+      return "bg-cyan-400/15 text-cyan-200 ring-1 ring-cyan-400/20";
+    case "CONTACTED":
+      return "bg-violet-400/15 text-violet-200 ring-1 ring-violet-400/20";
+    case "QUOTED":
+      return "bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/20";
+    case "BOOKED":
+      return "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/20";
+    case "LOST":
+      return "bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/20";
+    default:
+      return "bg-white/10 text-zinc-300 ring-1 ring-white/10";
   }
-
-  const diff = dueAt.getTime() - Date.now();
-
-  if (diff < 0) {
-    return {
-      label: "Overdue",
-      classes: "bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/20",
-    };
-  }
-
-  if (diff <= 1000 * 60 * 60 * 24) {
-    return {
-      label: "Due soon",
-      classes: "bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/20",
-    };
-  }
-
-  return {
-    label: "Upcoming",
-    classes: "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/20",
-  };
 }
 
 export default async function Home() {
@@ -45,69 +35,50 @@ export default async function Home() {
   }
 
   const now = new Date();
+  const tomorrow = new Date(now.getTime() + 1000 * 60 * 60 * 24);
   const weekFromNow = new Date(now.getTime() + 1000 * 60 * 60 * 24 * 7);
 
-  const [dbUsers, canvasCourses, assignments, importedGrades] = await Promise.all([
+  const [users, leads, jobs] = await Promise.all([
     db.user.count(),
-    db.canvasCourse.findMany({ orderBy: [{ name: "asc" }] }),
-    db.canvasAssignment.findMany({
-      where: {
-        OR: [{ dueAt: null }, { dueAt: { gte: new Date(now.getTime() - 1000 * 60 * 60 * 24 * 30) } }],
-      },
-      include: { course: true },
-      orderBy: [{ dueAt: "asc" }, { createdAt: "desc" }],
-      take: 50,
+    db.lead.findMany({
+      orderBy: [{ updatedAt: "desc" }],
+      take: 8,
     }),
-    getImportedCanvasGradeMap(),
+    db.job.findMany({
+      orderBy: [{ scheduledFor: "asc" }, { createdAt: "desc" }],
+      take: 8,
+      include: { lead: true },
+    }),
   ]);
 
-  const gradedCourses = canvasCourses
-    .map((course) => {
-      const importedGrade = importedGrades.get(course.canvasCourseId);
-      return importedGrade?.grade ?? course.currentScore;
-    })
-    .filter((grade): grade is number => typeof grade === "number");
-
-  const averageGrade = gradedCourses.length
-    ? gradedCourses.reduce((sum, grade) => sum + grade, 0) / gradedCourses.length
-    : null;
-
-  const overdueAssignments = assignments.filter((assignment) => assignment.dueAt && assignment.dueAt < now);
-  const dueThisWeekAssignments = assignments.filter(
-    (assignment) => assignment.dueAt && assignment.dueAt >= now && assignment.dueAt <= weekFromNow,
-  );
-  const upcomingAssignments = assignments
-    .filter((assignment) => !assignment.dueAt || assignment.dueAt >= now)
-    .slice(0, 8);
-
-  const topCourses = [...canvasCourses]
-    .sort((a, b) => {
-      const aGrade = importedGrades.get(a.canvasCourseId)?.grade ?? a.currentScore ?? -1;
-      const bGrade = importedGrades.get(b.canvasCourseId)?.grade ?? b.currentScore ?? -1;
-      return bGrade - aGrade;
-    })
-    .slice(0, 4);
+  const newLeads = leads.filter((lead) => lead.status === "NEW").length;
+  const overdueFollowUps = leads.filter((lead) => lead.nextFollowUpAt && lead.nextFollowUpAt < now).length;
+  const jobsThisWeek = jobs.filter((job) => job.scheduledFor && job.scheduledFor >= now && job.scheduledFor <= weekFromNow).length;
+  const pipelineValue = leads.reduce((sum, lead) => sum + (lead.estimatedCents ?? 0), 0);
+  const followUpsToday = leads.filter((lead) => lead.nextFollowUpAt && lead.nextFollowUpAt >= now && lead.nextFollowUpAt <= tomorrow);
+  const upcomingJobs = jobs.filter((job) => job.scheduledFor && job.scheduledFor >= now).slice(0, 5);
 
   const stats = [
-    { label: "Database Users", value: String(dbUsers), change: "live" },
-    { label: "Academic Classes", value: String(canvasCourses.length), change: "synced" },
-    { label: "Due This Week", value: String(dueThisWeekAssignments.length), change: "real" },
-    { label: "Average Grade", value: averageGrade != null ? formatScore(averageGrade) : "—", change: "tracked" },
+    { label: "New leads", value: String(newLeads), change: "this week" },
+    { label: "Follow-ups overdue", value: String(overdueFollowUps), change: "needs action" },
+    { label: "Jobs this week", value: String(jobsThisWeek), change: "scheduled" },
+    { label: "Pipeline value", value: formatCurrency(pipelineValue), change: "quoted" },
   ];
 
   return (
     <DashboardShell email={email} role={role} currentPath="/">
       <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Student dashboard</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">What needs attention</h2>
+          <p className="text-sm text-zinc-400">Home service CRM</p>
+          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Don’t let hot leads go cold</h2>
+          <p className="mt-2 text-sm text-zinc-500">Track leads, follow-ups, quotes, and booked jobs without the chaos.</p>
         </div>
         <div className="flex gap-3">
-          <Link href="/calendar" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">
-            Open Calendar
+          <Link href="/leads" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">
+            Open leads
           </Link>
-          <Link href="/canvas" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
-            Open Canvas
+          <Link href="/jobs" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
+            View jobs
           </Link>
         </div>
       </header>
@@ -130,43 +101,33 @@ export default async function Home() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">Upcoming assignments</h3>
-              <p className="text-sm text-zinc-400">What needs attention next</p>
+              <h3 className="text-lg font-semibold">Leads needing attention</h3>
+              <p className="text-sm text-zinc-400">Overdue follow-ups, fresh leads, and quotes still waiting</p>
             </div>
-            <Link href="/canvas/assignments" className="text-sm text-cyan-300 hover:text-cyan-200">
+            <Link href="/leads" className="text-sm text-cyan-300 hover:text-cyan-200">
               View all
             </Link>
           </div>
 
           <div className="mt-6 space-y-3">
-            {upcomingAssignments.length ? (
-              upcomingAssignments.map((assignment) => {
-                const tone = getStatusTone(assignment.dueAt);
-                return (
-                  <div
-                    key={assignment.id}
-                    className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between"
-                  >
-                    <div>
-                      <p className="font-medium">{assignment.name}</p>
-                      <p className="text-sm text-zinc-400">{assignment.course.name}</p>
-                      <p className="mt-1 text-sm text-zinc-500">
-                        {assignment.dueAt ? formatDateTime(assignment.dueAt) : "No due date"}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`rounded-full px-3 py-1 text-xs ${tone.classes}`}>{tone.label}</span>
-                      {assignment.htmlUrl ? (
-                        <a href={assignment.htmlUrl} target="_blank" rel="noreferrer" className="text-sm text-cyan-300 hover:text-cyan-200">
-                          Open
-                        </a>
-                      ) : null}
-                    </div>
+            {leads.length ? (
+              leads.map((lead) => (
+                <div key={lead.id} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-medium">{lead.fullName}</p>
+                    <p className="text-sm text-zinc-400">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+                    <p className="mt-1 text-sm text-zinc-500">
+                      {lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}
+                    </p>
                   </div>
-                );
-              })
+                  <div className="flex items-center gap-3">
+                    <span className={`rounded-full px-3 py-1 text-xs ${leadStatusTone(lead.status)}`}>{lead.status}</span>
+                    <span className="text-sm text-zinc-300">{formatCurrency(lead.estimatedCents)}</span>
+                  </div>
+                </div>
+              ))
             ) : (
-              <p className="text-sm text-zinc-500">No upcoming assignments yet. Run Canvas sync to load more data.</p>
+              <p className="text-sm text-zinc-500">No leads yet. Next up is adding lead capture and create flow.</p>
             )}
           </div>
         </div>
@@ -174,84 +135,66 @@ export default async function Home() {
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">Current grades</h3>
-              <p className="mt-1 text-sm text-zinc-400">Active classes only</p>
+              <h3 className="text-lg font-semibold">Today’s follow-ups</h3>
+              <p className="mt-1 text-sm text-zinc-400">Who needs a text or call right now</p>
             </div>
-            <Link href="/canvas" className="text-sm text-cyan-300 hover:text-cyan-200">
-              View all
-            </Link>
           </div>
 
           <div className="mt-6 space-y-4">
-            {topCourses.length ? (
-              topCourses.map((course) => {
-                const importedGrade = importedGrades.get(course.canvasCourseId);
-                const displayGrade = importedGrade?.grade ?? course.currentScore;
-                const sourceLabel = importedGrade?.source === "canvas-grades-page"
-                  ? "grades page"
-                  : importedGrade?.source === "better-canvas"
-                    ? "Better Canvas"
-                    : null;
-
-                return (
-                  <div
-                    key={course.id}
-                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 p-4"
-                  >
-                    <div>
-                      <p className="font-medium">{course.name}</p>
-                      <p className="text-sm text-zinc-400">{course.courseCode || "No course code"}</p>
-                      {sourceLabel ? <p className="mt-1 text-xs text-zinc-500">Source: {sourceLabel}</p> : null}
-                    </div>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-200">
-                      {formatScore(displayGrade)}
-                    </span>
-                  </div>
-                );
-              })
+            {followUpsToday.length ? (
+              followUpsToday.map((lead) => (
+                <div key={lead.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="font-medium">{lead.fullName}</p>
+                  <p className="text-sm text-zinc-400">{lead.phone || lead.email || "No contact info"}</p>
+                  <p className="mt-1 text-xs text-zinc-500">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "No date"}</p>
+                </div>
+              ))
             ) : (
-              <p className="text-sm text-zinc-500">Run Canvas sync to load your school data.</p>
+              <p className="text-sm text-zinc-500">Nothing scheduled for today.</p>
             )}
           </div>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold">Workload snapshot</h3>
-          <div className="mt-5 space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Overdue assignments</p>
-              <p className="mt-2 text-3xl font-semibold">{overdueAssignments.length}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Due in the next 7 days</p>
-              <p className="mt-2 text-3xl font-semibold">{dueThisWeekAssignments.length}</p>
-            </div>
-          </div>
-        </div>
-
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6 xl:col-span-2">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold">Useful next moves</h3>
-              <p className="text-sm text-zinc-400">Skip the old fake analytics and go straight to the real stuff</p>
+              <h3 className="text-lg font-semibold">Upcoming jobs</h3>
+              <p className="text-sm text-zinc-400">What’s already booked and on the calendar</p>
             </div>
+            <Link href="/jobs" className="text-sm text-cyan-300 hover:text-cyan-200">View jobs</Link>
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <Link href="/calendar" className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/10">
-              <p className="font-medium">Open calendar</p>
-              <p className="mt-2 text-sm text-zinc-500">See due dates by day and class.</p>
-            </Link>
-            <Link href="/canvas/assignments" className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/10">
-              <p className="font-medium">Review assignments</p>
-              <p className="mt-2 text-sm text-zinc-500">Check everything upcoming in one list.</p>
-            </Link>
-            <Link href="/canvas" className="rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/10">
-              <p className="font-medium">Check grades</p>
-              <p className="mt-2 text-sm text-zinc-500">Compare current class performance fast.</p>
-            </Link>
+          <div className="mt-6 space-y-3">
+            {upcomingJobs.length ? (
+              upcomingJobs.map((job) => (
+                <div key={job.id} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-medium">{job.title}</p>
+                    <p className="text-sm text-zinc-400">{job.lead?.fullName || "No linked lead"} • {job.serviceType}</p>
+                    <p className="mt-1 text-sm text-zinc-500">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
+                  </div>
+                  <div className="text-sm text-zinc-300">{formatCurrency(job.finalCents ?? job.quotedCents)}</div>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-zinc-500">No jobs booked yet.</p>
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <h3 className="text-lg font-semibold">Quick wins</h3>
+          <div className="mt-5 space-y-4">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-zinc-400">Accounts in app</p>
+              <p className="mt-2 text-3xl font-semibold">{users}</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-zinc-400">Next product step</p>
+              <p className="mt-2 text-sm text-zinc-200">Add create/edit flows for leads and jobs, then SMS/email follow-up automation.</p>
+            </div>
           </div>
         </div>
       </div>

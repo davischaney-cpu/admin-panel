@@ -11,10 +11,10 @@ type DashboardShellProps = {
 };
 
 const navItems = [
-  { label: "Home", href: "/" },
+  { label: "Dashboard", href: "/" },
+  { label: "Leads", href: "/leads" },
+  { label: "Jobs", href: "/jobs" },
   { label: "Calendar", href: "/calendar" },
-  { label: "Assignments", href: "/canvas/assignments" },
-  { label: "Grades", href: "/canvas" },
   { label: "Users", href: "/users" },
 ];
 
@@ -25,13 +25,13 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
         <aside className="hidden border-r border-white/10 bg-white/5 p-6 lg:block">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">DavyG</p>
-            <h1 className="mt-2 text-2xl font-semibold">DavyG Admin Panel</h1>
-            <p className="mt-2 text-sm text-zinc-500">Assignments, grades, and what matters next.</p>
+            <h1 className="mt-2 text-2xl font-semibold">DavyG CRM</h1>
+            <p className="mt-2 text-sm text-zinc-500">Stop losing leads. Track every follow-up and job in one place.</p>
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
             {navItems.map((item) => {
-              const isActive = item.href !== "#" && (item.href === currentPath || currentPath.startsWith(`${item.href}/`));
+              const isActive = item.href === currentPath || currentPath.startsWith(`${item.href}/`);
               const baseClasses = isActive
                 ? "bg-white text-black"
                 : "text-zinc-300 hover:bg-white/10 hover:text-white";

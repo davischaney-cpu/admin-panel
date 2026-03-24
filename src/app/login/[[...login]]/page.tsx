@@ -7,7 +7,7 @@ export default async function LoginPage() {
   const { userId } = await auth();
 
   if (userId) {
-    redirect("/");
+    redirect("/dashboard");
   }
 
   return (
@@ -19,17 +19,17 @@ export default async function LoginPage() {
         <div className="grid lg:grid-cols-[1fr_460px]">
           <section className="hidden border-r border-white/10 p-10 lg:block">
             <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">DavyG</p>
-            <h1 className="mt-4 max-w-sm text-4xl font-semibold tracking-tight">Sign in to DavyG Admin Panel.</h1>
+            <h1 className="mt-4 max-w-sm text-4xl font-semibold tracking-tight">Sign in to DavyG CRM.</h1>
             <p className="mt-4 max-w-md text-sm leading-7 text-zinc-400">
-              Clean access to assignments, grades, due dates, and the stuff you actually need to check fast.
+              Manage leads, follow-ups, quotes, and booked jobs without bouncing between notes, texts, and spreadsheets.
             </p>
 
             <div className="mt-10 space-y-3">
               {[
-                "Upcoming work in one place",
-                "Calendar view for due dates",
-                "Fast links back to Canvas",
-                "Locked down to approved admins",
+                "Leads and follow-ups in one place",
+                "Pipeline view built for small teams",
+                "Booked jobs and calendar visibility",
+                "Access controlled by company role",
               ].map((item) => (
                 <div key={item} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-300">
                   {item}

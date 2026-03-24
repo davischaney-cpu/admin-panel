@@ -7,7 +7,7 @@ export default async function SignUpPage() {
   const { userId } = await auth();
 
   if (userId) {
-    redirect("/");
+    redirect("/dashboard");
   }
 
   return (
@@ -19,17 +19,17 @@ export default async function SignUpPage() {
         <div className="grid lg:grid-cols-[1fr_460px]">
           <section className="hidden border-r border-white/10 p-10 lg:block">
             <p className="text-xs uppercase tracking-[0.3em] text-violet-300">DavyG</p>
-            <h1 className="mt-4 max-w-sm text-4xl font-semibold tracking-tight">Create access for DavyG Admin Panel.</h1>
+            <h1 className="mt-4 max-w-sm text-4xl font-semibold tracking-tight">Create your DavyG CRM account.</h1>
             <p className="mt-4 max-w-md text-sm leading-7 text-zinc-400">
-              Make the account first, then we can control who actually gets admin access inside the app.
+              Start with an account, then assign the right company role so each person only sees and edits what they should.
             </p>
 
             <div className="mt-10 space-y-3">
               {[
                 "Email or Google sign-in",
-                "Protected dashboard routes",
-                "Admin role managed in Clerk",
-                "Built for real school workflow",
+                "Protected company workspace",
+                "Roles synced with Clerk and the app",
+                "Built for leads, jobs, and follow-ups",
               ].map((item) => (
                 <div key={item} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-300">
                   {item}

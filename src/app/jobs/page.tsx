@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
@@ -65,7 +66,7 @@ export default async function JobsPage() {
               {jobs.length ? jobs.map((job) => (
                 <tr key={job.id} className="border-b border-white/5 last:border-0">
                   <td className="py-4">
-                    <p className="font-medium">{job.title}</p>
+                    <Link href={`/jobs/${job.id}`} className="font-medium hover:text-cyan-200">{job.title}</Link>
                     <p className="text-zinc-400">{job.serviceType}</p>
                   </td>
                   <td className="py-4 text-zinc-300">{job.lead?.fullName || "—"}</td>

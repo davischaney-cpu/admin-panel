@@ -44,7 +44,7 @@ export default async function SignUpPage() {
                 path="/sign-up"
                 routing="path"
                 signInUrl="/login"
-                forceRedirectUrl="/"
+                forceRedirectUrl="/dashboard"
                 appearance={clerkAppearance}
               />
             </div>

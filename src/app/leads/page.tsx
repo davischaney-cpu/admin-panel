@@ -1,6 +1,8 @@
 import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-button";
 import { CreateLeadForm } from "@/components/create-lead-form";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { LeadFollowUpActions } from "@/components/lead-follow-up-actions";
+import { LeadsPipelineBoard } from "@/components/leads-pipeline-board";
 import { LeadStatusActions } from "@/components/lead-status-actions";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
@@ -73,7 +75,10 @@ export default async function LeadsPage() {
       <div className="mt-8 grid gap-6 xl:grid-cols-[0.95fr_1.4fr]">
         <CreateLeadForm />
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div className="space-y-6">
+          <LeadsPipelineBoard leads={leads} />
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="text-zinc-400">
@@ -102,7 +107,12 @@ export default async function LeadsPage() {
                     </div>
                   </td>
                   <td className="py-4 text-zinc-300">{lead.source}</td>
-                  <td className="py-4 text-zinc-300">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "—"}</td>
+                  <td className="py-4 text-zinc-300">
+                    <div className="flex flex-col gap-2">
+                      <span>{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "—"}</span>
+                      <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
+                    </div>
+                  </td>
                   <td className="py-4 text-zinc-300">{formatCurrency(lead.estimatedCents)}</td>
                   <td className="py-4">
                     <CreateJobFromLeadButton
@@ -122,6 +132,7 @@ export default async function LeadsPage() {
             </tbody>
           </table>
         </div>
+          </div>
         </div>
       </div>
     </DashboardShell>

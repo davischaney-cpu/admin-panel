@@ -1,10 +1,7 @@
 import Link from "next/link";
-import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-button";
 import { CreateLeadForm } from "@/components/create-lead-form";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { LeadFollowUpActions } from "@/components/lead-follow-up-actions";
 import { LeadsPipelineBoard } from "@/components/leads-pipeline-board";
-import { LeadStatusActions } from "@/components/lead-status-actions";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -50,7 +47,7 @@ export default async function LeadsPage() {
         <div>
           <p className="text-sm text-zinc-400">Pipeline</p>
           <h2 className="mt-1 text-3xl font-semibold tracking-tight">Leads</h2>
-          <p className="mt-2 text-sm text-zinc-500">Track every inquiry, quote, callback, and booked customer from one place.</p>
+          <p className="mt-2 text-sm text-zinc-500">Track inquiries, follow-ups, and booked customers without the clutter.</p>
         </div>
       </header>
 
@@ -80,59 +77,34 @@ export default async function LeadsPage() {
           <LeadsPipelineBoard leads={leads} />
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-left text-sm">
-            <thead className="text-zinc-400">
-              <tr className="border-b border-white/10">
-                <th className="pb-3 font-medium">Lead</th>
-                <th className="pb-3 font-medium">Service</th>
-                <th className="pb-3 font-medium">Status</th>
-                <th className="pb-3 font-medium">Source</th>
-                <th className="pb-3 font-medium">Next follow-up</th>
-                <th className="pb-3 font-medium">Value</th>
-                <th className="pb-3 font-medium">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold">Recent leads</h3>
+                <p className="text-sm text-zinc-400">Compact list view — click into a lead to edit details.</p>
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-3">
               {leads.length ? leads.map((lead) => (
-                <tr key={lead.id} className="border-b border-white/5 last:border-0">
-                  <td className="py-4">
-                    <Link href={`/leads/${lead.id}`} className="font-medium hover:text-cyan-200">{lead.fullName}</Link>
-                    <p className="text-zinc-400">{lead.phone || lead.email || "No contact info"}</p>
-                  </td>
-                  <td className="py-4 text-zinc-300">{lead.serviceType}</td>
-                  <td className="py-4">
-                    <div className="flex flex-col gap-2">
-                      <span className={`w-fit rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
-                      <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
-                    </div>
-                  </td>
-                  <td className="py-4 text-zinc-300">{lead.source}</td>
-                  <td className="py-4 text-zinc-300">
-                    <div className="flex flex-col gap-2">
-                      <span>{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "—"}</span>
-                      <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
-                    </div>
-                  </td>
-                  <td className="py-4 text-zinc-300">{formatCurrency(lead.estimatedCents)}</td>
-                  <td className="py-4">
-                    <CreateJobFromLeadButton
-                      leadId={lead.id}
-                      fullName={lead.fullName}
-                      serviceType={lead.serviceType}
-                      estimatedCents={lead.estimatedCents}
-                      location={lead.location}
-                    />
-                  </td>
-                </tr>
+                <Link key={lead.id} href={`/leads/${lead.id}`} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="font-medium">{lead.fullName}</p>
+                    <p className="text-sm text-zinc-400">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+                    <p className="mt-1 text-xs text-zinc-500">{lead.phone || lead.email || "No contact info"}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 text-sm">
+                    <span className={`rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
+                    <span className="text-zinc-400">{lead.source}</span>
+                    <span className="text-zinc-500">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "No follow-up"}</span>
+                    <span className="text-zinc-200">{formatCurrency(lead.estimatedCents)}</span>
+                  </div>
+                </Link>
               )) : (
-                <tr>
-                  <td colSpan={7} className="py-10 text-center text-zinc-500">No leads yet. Next step is adding lead creation and import flows.</td>
-                </tr>
+                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
+                  No leads yet. Create your first lead to start building the pipeline.
+                </div>
               )}
-            </tbody>
-          </table>
-        </div>
+            </div>
           </div>
         </div>
       </div>

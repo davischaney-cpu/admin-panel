@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LandingScreenshots } from "@/components/landing-screenshots";
 import { PublicLeadCaptureForm } from "@/components/public-lead-capture-form";
 
 const highlights = [

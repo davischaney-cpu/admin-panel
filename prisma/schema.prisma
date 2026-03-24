@@ -8,13 +8,18 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  clerkUserId String   @unique
-  email       String   @unique
-  name        String?
-  role        Role     @default(VIEWER)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  clerkUserId          String   @unique
+  email                String   @unique
+  name                 String?
+  role                 Role     @default(VIEWER)
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  billingPlan          BillingPlan @default(FREE)
+  notifyEmail          Boolean  @default(true)
+  notifySms            Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 }
 
 model Lead {
@@ -99,4 +104,11 @@ enum JobStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum BillingPlan {
+  FREE
+  STARTER
+  PRO
+  TEAM
 }

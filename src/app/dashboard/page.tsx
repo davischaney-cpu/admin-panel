@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { BillingCard } from "@/components/billing-card";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { DemoDataControls } from "@/components/demo-data-controls";
+import { NotificationsCard } from "@/components/notifications-card";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
@@ -159,18 +162,23 @@ export default async function DashboardPage() {
             )) : <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">No jobs booked yet. Convert a lead into a job from the Leads page.</div>}
           </div>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold">Quick wins</h3>
-          <div className="mt-5 space-y-4">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Accounts in app</p>
-              <p className="mt-2 text-3xl font-semibold">{users}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">What to build next</p>
-              <p className="mt-2 text-sm text-zinc-200">Add job editing, notes, and automated SMS or email follow-ups to make this sellable.</p>
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <h3 className="text-lg font-semibold">Quick wins</h3>
+            <div className="mt-5 space-y-4">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">Accounts in app</p>
+                <p className="mt-2 text-3xl font-semibold">{users}</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">What to build next</p>
+                <p className="mt-2 text-sm text-zinc-200">Wire live Stripe, plug in email/SMS providers, and use the demo workspace for sales calls.</p>
+              </div>
             </div>
           </div>
+          <BillingCard />
+          <NotificationsCard />
+          <DemoDataControls />
         </div>
       </div>
     </DashboardShell>

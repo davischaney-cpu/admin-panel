@@ -25,11 +25,11 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-zinc-50">
       <div className="grid min-h-screen lg:grid-cols-[260px_1fr]">
-        <aside className="hidden border-r border-white/10 bg-white/5 p-6 lg:block">
+        <aside className="hidden border-r border-white/10 bg-black/20 p-6 backdrop-blur lg:block">
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">DavyG</p>
-            <h1 className="mt-2 text-2xl font-semibold">DavyG CRM</h1>
-            <p className="mt-2 text-sm text-zinc-500">Stop losing leads. Track every follow-up and job in one place.</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white">DavyG CRM</h1>
+            <p className="mt-2 text-sm leading-6 text-zinc-500">A tighter workspace for leads, jobs, follow-ups, and team visibility.</p>
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
@@ -53,7 +53,7 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
         </aside>
 
         <section className="p-5 sm:p-8 lg:p-10">
-          <div className="mb-6 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+          <div className="mb-8 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
             <div>
               <p className="text-sm text-zinc-300">{role ? `${role[0].toUpperCase()}${role.slice(1)}` : "Account"}</p>
               <p className="text-xs text-zinc-500">{email ?? "Signed in"}</p>

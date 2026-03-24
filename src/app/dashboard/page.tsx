@@ -4,6 +4,7 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { DemoDataControls } from "@/components/demo-data-controls";
 import { NotificationsCard } from "@/components/notifications-card";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
+import { EmptyState, PageHeader, PrimaryButton, SectionCard, SectionTitle, SecondaryButton, StatCard } from "@/components/ui";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -58,37 +59,25 @@ export default async function DashboardPage() {
   const hasJobs = jobs.length > 0;
   const hasFollowUps = leads.some((lead) => Boolean(lead.nextFollowUpAt));
 
-  const stats = [
-    { label: "New leads", value: String(newLeads), change: "this week" },
-    { label: "Follow-ups overdue", value: String(overdueFollowUps), change: "needs action" },
-    { label: "Jobs this week", value: String(jobsThisWeek), change: "scheduled" },
-    { label: "Pipeline value", value: formatCurrency(pipelineValue), change: "quoted" },
-  ];
-
   return (
     <DashboardShell email={email} role={role} currentPath="/dashboard">
-      <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-zinc-400">Operations overview</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Run the day without losing the thread</h2>
-          <p className="mt-2 text-sm text-zinc-500">See the pipeline, today’s follow-ups, and upcoming jobs at a glance.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/leads" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">Open leads</Link>
-          <Link href="/jobs" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">View jobs</Link>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Operations overview"
+        title="Run the day without losing the thread"
+        description="See the pipeline, today’s follow-ups, and upcoming jobs at a glance."
+        actions={
+          <>
+            <PrimaryButton href="/leads">Open leads</PrimaryButton>
+            <SecondaryButton href="/jobs">View jobs</SecondaryButton>
+          </>
+        }
+      />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-5">
-            <p className="text-sm text-zinc-400">{stat.label}</p>
-            <div className="mt-4 flex items-end justify-between gap-3">
-              <p className="text-3xl font-semibold">{stat.value}</p>
-              <span className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs text-emerald-300">{stat.change}</span>
-            </div>
-          </div>
-        ))}
+        <StatCard label="New leads" value={String(newLeads)} hint="this week" />
+        <StatCard label="Follow-ups overdue" value={String(overdueFollowUps)} hint="needs action" />
+        <StatCard label="Jobs this week" value={String(jobsThisWeek)} hint="scheduled" />
+        <StatCard label="Pipeline value" value={formatCurrency(pipelineValue)} hint="quoted" />
       </div>
 
       {!hasLeads ? (
@@ -98,19 +87,13 @@ export default async function DashboardPage() {
       ) : null}
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">Leads needing attention</h3>
-              <p className="text-sm text-zinc-400">Overdue follow-ups, fresh leads, and quotes still waiting</p>
-            </div>
-            <Link href="/leads" className="text-sm text-cyan-300 hover:text-cyan-200">View all</Link>
-          </div>
+        <SectionCard>
+          <SectionTitle title="Leads needing attention" description="Overdue follow-ups, fresh leads, and quotes still waiting" action={<Link href="/leads" className="text-sm text-cyan-300 hover:text-cyan-200">View all</Link>} />
           <div className="mt-6 space-y-3">
             {leads.length ? leads.map((lead) => (
               <div key={lead.id} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="font-medium">{lead.fullName}</p>
+                  <p className="font-medium text-white">{lead.fullName}</p>
                   <p className="text-sm text-zinc-400">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
                   <p className="mt-1 text-sm text-zinc-500">{lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}</p>
                 </div>
@@ -119,63 +102,55 @@ export default async function DashboardPage() {
                   <span className="text-sm text-zinc-300">{formatCurrency(lead.estimatedCents)}</span>
                 </div>
               </div>
-            )) : (
-              <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">No leads yet. Create your first lead in the Leads tab to start building the pipeline.</div>
-            )}
+            )) : <EmptyState title="No leads yet" description="Create your first lead in the Leads tab to start building the pipeline." />}
           </div>
-        </div>
+        </SectionCard>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold">Today’s follow-ups</h3>
-          <p className="mt-1 text-sm text-zinc-400">Who needs a text or call right now</p>
+        <SectionCard>
+          <SectionTitle title="Today’s follow-ups" description="Who needs a text or call right now" />
           <div className="mt-6 space-y-4">
             {followUpsToday.length ? followUpsToday.map((lead) => (
               <div key={lead.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="font-medium">{lead.fullName}</p>
+                <p className="font-medium text-white">{lead.fullName}</p>
                 <p className="text-sm text-zinc-400">{lead.phone || lead.email || "No contact info"}</p>
                 <p className="mt-1 text-xs text-zinc-500">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "No date"}</p>
               </div>
-            )) : <p className="text-sm text-zinc-500">Nothing scheduled for today.</p>}
+            )) : <EmptyState title="Nothing scheduled for today" description="As follow-ups are assigned, they’ll appear here for quick action." />}
           </div>
-        </div>
+        </SectionCard>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 xl:col-span-2">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold">Upcoming jobs</h3>
-              <p className="text-sm text-zinc-400">What’s already booked and on the calendar</p>
-            </div>
-            <Link href="/jobs" className="text-sm text-cyan-300 hover:text-cyan-200">View jobs</Link>
-          </div>
+        <SectionCard className="xl:col-span-2">
+          <SectionTitle title="Upcoming jobs" description="What’s already booked and on the calendar" action={<Link href="/jobs" className="text-sm text-cyan-300 hover:text-cyan-200">View jobs</Link>} />
           <div className="mt-6 space-y-3">
             {upcomingJobs.length ? upcomingJobs.map((job) => (
               <Link key={job.id} href={`/jobs/${job.id}`} className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="font-medium">{job.title}</p>
+                  <p className="font-medium text-white">{job.title}</p>
                   <p className="text-sm text-zinc-400">{job.lead?.fullName || "No linked lead"} • {job.serviceType}</p>
                   <p className="mt-1 text-sm text-zinc-500">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
                 </div>
                 <div className="text-sm text-zinc-300">{formatCurrency(job.finalCents ?? job.quotedCents)}</div>
               </Link>
-            )) : <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">No jobs booked yet. Convert a lead into a job from the Leads page.</div>}
+            )) : <EmptyState title="No jobs booked yet" description="Convert a lead into a job from the Leads page and it’ll show up here automatically." />}
           </div>
-        </div>
+        </SectionCard>
+
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Quick wins</h3>
+          <SectionCard>
+            <SectionTitle title="Quick wins" />
             <div className="mt-5 space-y-4">
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <p className="text-sm text-zinc-400">Accounts in app</p>
-                <p className="mt-2 text-3xl font-semibold">{users}</p>
+                <p className="mt-2 text-3xl font-semibold text-white">{users}</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <p className="text-sm text-zinc-400">What to build next</p>
                 <p className="mt-2 text-sm text-zinc-200">Wire live Stripe, plug in email/SMS providers, and use the demo workspace for sales calls.</p>
               </div>
             </div>
-          </div>
+          </SectionCard>
           {hasPermission("manageBilling") ? <BillingCard /> : null}
           {hasPermission("manageNotifications") ? <NotificationsCard /> : null}
           {hasPermission("useDemoTools") ? <DemoDataControls /> : null}

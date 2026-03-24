@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { getAdminContext } from "@/lib/admin";
 import { formatDate } from "@/lib/format";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { PageHeader, SectionCard, SectionTitle, StatCard, SecondaryButton } from "@/components/ui";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { UserRoleSelect } from "@/components/user-role-select";
 import { getRolePermissions } from "@/lib/permissions";
@@ -48,48 +49,24 @@ export default async function UsersPage() {
 
   return (
     <DashboardShell email={email} role={role} currentPath="/users">
-      <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-zinc-400">Team access</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Users & roles</h2>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-500">
-            Keep access clean across the company — owners, admins, sales, ops, and view-only users all get different capabilities.
-          </p>
-        </div>
-        <Link href="/dashboard" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">
-          Back to dashboard
-        </Link>
-      </header>
+      <PageHeader
+        eyebrow="Team access"
+        title="Users & roles"
+        description="Keep access clean across the company — owners, admins, sales, ops, and view-only users all get different capabilities."
+        actions={<SecondaryButton href="/dashboard">Back to dashboard</SecondaryButton>}
+      />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-sm text-zinc-400">Total users</p>
-          <p className="mt-3 text-3xl font-semibold">{users.length}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-sm text-zinc-400">Owners + admins</p>
-          <p className="mt-3 text-3xl font-semibold">{ownerCount + adminCount}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-sm text-zinc-400">Sales + ops</p>
-          <p className="mt-3 text-3xl font-semibold">{salesCount + opsCount}</p>
-        </div>
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-sm text-zinc-400">Newest signup</p>
-          <p className="mt-3 text-lg font-semibold">{users[0] ? formatDate(users[0].createdAt) : "No users yet"}</p>
-        </div>
+        <StatCard label="Total users" value={String(users.length)} />
+        <StatCard label="Owners + admins" value={String(ownerCount + adminCount)} />
+        <StatCard label="Sales + ops" value={String(salesCount + opsCount)} />
+        <StatCard label="Newest signup" value={users[0] ? formatDate(users[0].createdAt) : "No users yet"} />
       </div>
 
       <div className="mt-8 grid gap-6 2xl:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold">Team members</h3>
-                <p className="text-sm text-zinc-400">Change a role here and the app updates both database access and Clerk metadata.</p>
-              </div>
-            </div>
-
+          <SectionCard>
+            <SectionTitle title="Team members" description="Change a role here and the app updates both database access and Clerk metadata." />
             <div className="mt-6 space-y-3">
               {users.length ? users.map((user) => (
                 <div key={user.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -108,26 +85,18 @@ export default async function UsersPage() {
 
                     <div className="flex flex-col gap-2 lg:min-w-40">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">Role</p>
-                      {hasPermission("manageRoles") ? (
-                        <UserRoleSelect userId={user.id} value={user.role} />
-                      ) : (
-                        <span className="text-zinc-500">No access</span>
-                      )}
+                      {hasPermission("manageRoles") ? <UserRoleSelect userId={user.id} value={user.role} /> : <span className="text-zinc-500">No access</span>}
                     </div>
                   </div>
                 </div>
-              )) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
-                  No synced users yet.
-                </div>
-              )}
+              )) : null}
             </div>
-          </div>
+          </SectionCard>
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Role guide</h3>
+          <SectionCard>
+            <SectionTitle title="Role guide" description="A quick explanation of what each role can do." />
             <div className="mt-5 space-y-4">
               {(["OWNER", "ADMIN", "SALES", "OPS", "VIEWER"] as const).map((roleName) => (
                 <div key={roleName} className="rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -137,15 +106,13 @@ export default async function UsersPage() {
                   <p className="mt-3 text-sm text-zinc-400">{roleDescriptions[roleName]}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {getRolePermissions(roleName).map((permission) => (
-                      <span key={permission} className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-zinc-300">
-                        {permission}
-                      </span>
+                      <span key={permission} className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-zinc-300">{permission}</span>
                     ))}
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </SectionCard>
         </div>
       </div>
     </DashboardShell>

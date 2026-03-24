@@ -30,35 +30,35 @@ export default function LandingPage() {
         <div className="relative mx-auto max-w-6xl px-6 py-24 sm:px-10 lg:px-12">
           <div className="grid gap-10 lg:grid-cols-[1fr_0.95fr] lg:items-center">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-zinc-400">DavyG</p>
-              <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-6xl">
+              <p className="text-xs font-medium uppercase tracking-[0.24em] text-zinc-500">DavyG</p>
+              <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-6xl">
                 The simple CRM for home-service operators who need to follow up faster.
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-zinc-300 sm:text-lg">
+              <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-300 sm:text-lg">
                 DavyG CRM helps solo operators and small crews keep up with new leads, quotes, callbacks, and booked jobs without bouncing between notes, texts, and spreadsheets.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href="/sign-up" className="rounded-xl bg-cyan-300 px-4 py-2 text-sm font-medium text-black hover:bg-cyan-200">Start free</Link>
-                <Link href="/login" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">Sign in</Link>
-                <Link href="#pricing" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">See pricing</Link>
+                <Link href="/sign-up" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-zinc-200">Start free</Link>
+                <Link href="/login" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">Sign in</Link>
+                <Link href="#pricing" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">See pricing</Link>
               </div>
 
               <div className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {highlights.map((item) => (
-                  <div key={item} className="rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-zinc-300">
+                  <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-sm text-zinc-300 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
                     {item}
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-white/5 p-4 shadow-2xl shadow-cyan-950/20 backdrop-blur">
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-4 shadow-2xl shadow-cyan-950/20 backdrop-blur">
               <div className="rounded-[1.5rem] border border-white/10 bg-[#0f1218] p-5">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Product preview</p>
-                    <h2 className="mt-2 text-xl font-semibold">Today’s operating view</h2>
+                    <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">Product preview</p>
+                    <h2 className="mt-2 text-xl font-semibold text-white">Today’s operating view</h2>
                   </div>
                   <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs text-emerald-300">Live pipeline</span>
                 </div>
@@ -71,7 +71,7 @@ export default function LandingPage() {
                   ].map(([label, value]) => (
                     <div key={label} className="rounded-2xl border border-white/10 bg-black/20 p-4">
                       <p className="text-sm text-zinc-400">{label}</p>
-                      <p className="mt-2 text-3xl font-semibold">{value}</p>
+                      <p className="mt-2 text-3xl font-semibold text-white">{value}</p>
                     </div>
                   ))}
                 </div>
@@ -79,7 +79,7 @@ export default function LandingPage() {
                 <div className="mt-5 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium">Leads needing attention</h3>
+                      <h3 className="font-medium text-white">Leads needing attention</h3>
                       <span className="text-xs text-zinc-500">Pipeline</span>
                     </div>
                     <div className="mt-4 space-y-3">
@@ -90,7 +90,7 @@ export default function LandingPage() {
                       ].map(([name, meta, status, value]) => (
                         <div key={name} className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-3">
                           <div>
-                            <p className="font-medium">{name}</p>
+                            <p className="font-medium text-white">{name}</p>
                             <p className="text-xs text-zinc-500">{meta}</p>
                             <p className="mt-1 text-xs text-cyan-300">{status}</p>
                           </div>
@@ -102,7 +102,7 @@ export default function LandingPage() {
 
                   <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium">This week’s jobs</h3>
+                      <h3 className="font-medium text-white">This week’s jobs</h3>
                       <span className="text-xs text-zinc-500">Calendar</span>
                     </div>
                     <div className="mt-4 space-y-3">
@@ -113,7 +113,7 @@ export default function LandingPage() {
                       ].map(([time, title]) => (
                         <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-3">
                           <p className="text-xs text-zinc-500">{time}</p>
-                          <p className="mt-1 font-medium">{title}</p>
+                          <p className="mt-1 font-medium text-white">{title}</p>
                         </div>
                       ))}
                     </div>
@@ -125,11 +125,13 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <LandingScreenshots />
+
       <section className="mx-auto max-w-6xl px-6 py-16 sm:px-10 lg:px-12">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
             <p className="text-sm text-zinc-400">Why it sells</p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight">Stop losing leads because follow-up is messy.</h2>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white">Stop losing leads because follow-up is messy.</h2>
             <div className="mt-6 space-y-4 text-sm leading-7 text-zinc-300">
               <p>Most small operators do not need Salesforce. They need one place to see new inquiries, quotes waiting on approval, callbacks due today, and jobs already booked.</p>
               <p>DavyG CRM is shaped around that exact workflow: lead in, follow-up fast, quote, book, complete.</p>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { OnboardingChecklist } from "@/components/onboarding-checklist";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -50,6 +51,9 @@ export default async function DashboardPage() {
   const pipelineValue = leads.reduce((sum, lead) => sum + (lead.estimatedCents ?? 0), 0);
   const followUpsToday = leads.filter((lead) => lead.nextFollowUpAt && lead.nextFollowUpAt >= now && lead.nextFollowUpAt <= tomorrow);
   const upcomingJobs = jobs.filter((job) => job.scheduledFor && job.scheduledFor >= now).slice(0, 5);
+  const hasLeads = leads.length > 0;
+  const hasJobs = jobs.length > 0;
+  const hasFollowUps = leads.some((lead) => Boolean(lead.nextFollowUpAt));
 
   const stats = [
     { label: "New leads", value: String(newLeads), change: "this week" },
@@ -83,6 +87,12 @@ export default async function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {!hasLeads ? (
+        <div className="mt-8">
+          <OnboardingChecklist hasLeads={hasLeads} hasJobs={hasJobs} hasFollowUps={hasFollowUps} />
+        </div>
+      ) : null}
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.5fr_1fr]">
         <div className="rounded-3xl border border-white/10 bg-white/5 p-6">

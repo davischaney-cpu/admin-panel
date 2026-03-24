@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CreateLeadForm } from "@/components/create-lead-form";
+import { CreateLeadPanel } from "@/components/create-lead-panel";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { LeadsPipelineBoard } from "@/components/leads-pipeline-board";
 import { UnauthorizedState } from "@/components/unauthorized-state";
@@ -71,7 +71,7 @@ export default async function LeadsPage() {
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[0.95fr_1.4fr]">
-        <CreateLeadForm />
+        <CreateLeadPanel />
 
         <div className="space-y-6">
           <LeadsPipelineBoard leads={leads} />

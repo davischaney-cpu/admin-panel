@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 const sourceOptions = ["WEBSITE", "INSTAGRAM", "FACEBOOK", "GOOGLE", "REFERRAL", "PHONE"] as const;
 
-export function CreateLeadForm() {
+export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
@@ -62,7 +62,7 @@ export function CreateLeadForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <form onSubmit={handleSubmit} className={compact ? "rounded-3xl border border-white/10 bg-black/20 p-4" : "rounded-3xl border border-white/10 bg-white/5 p-6"}>
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Create lead</h3>

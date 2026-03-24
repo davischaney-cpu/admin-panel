@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { getAdminContext } from "@/lib/admin";
 import { formatDate } from "@/lib/format";
@@ -6,7 +7,8 @@ import { DashboardShell } from "@/components/dashboard-shell";
 import { PageHeader, SectionCard, SectionTitle, StatCard, SecondaryButton } from "@/components/ui";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { UserRoleSelect } from "@/components/user-role-select";
-import { getRolePermissions } from "@/lib/permissions";
+import { getRolePermissions, normalizeRole } from "@/lib/permissions";
+import { isOwnerEmail } from "@/lib/owner";
 
 function roleClasses(role: string) {
   switch (role) {
@@ -38,8 +40,33 @@ export default async function UsersPage() {
     return <UnauthorizedState email={email} />;
   }
 
-  const users = await db.user.findMany({
-    orderBy: [{ role: "asc" }, { createdAt: "desc" }],
+  const [dbUsers, clerk] = await Promise.all([
+    db.user.findMany({ orderBy: [{ role: "asc" }, { createdAt: "desc" }] }),
+    clerkClient(),
+  ]);
+
+  const clerkUsers = await clerk.users.getUserList({ limit: 100 });
+  const dbByClerkId = new Map(dbUsers.map((user) => [user.clerkUserId, user]));
+
+  const users = clerkUsers.data.map((clerkUser) => {
+    const primaryEmail = clerkUser.emailAddresses.find((entry) => entry.id === clerkUser.primaryEmailAddressId)?.emailAddress
+      ?? clerkUser.emailAddresses[0]?.emailAddress
+      ?? "No email";
+    const dbUser = dbByClerkId.get(clerkUser.id);
+    const role = isOwnerEmail(primaryEmail)
+      ? "OWNER"
+      : normalizeRole(dbUser?.role ?? (typeof clerkUser.publicMetadata?.role === "string" ? clerkUser.publicMetadata.role : null));
+
+    return {
+      id: dbUser?.id ?? `clerk:${clerkUser.id}`,
+      clerkUserId: clerkUser.id,
+      email: primaryEmail,
+      name: [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") || clerkUser.username || dbUser?.name || "Unnamed user",
+      role,
+      createdAt: dbUser?.createdAt ?? (clerkUser.createdAt ? new Date(clerkUser.createdAt) : new Date()),
+      synced: Boolean(dbUser),
+      lockedOwner: isOwnerEmail(primaryEmail),
+    };
   });
 
   const ownerCount = users.filter((user) => user.role === "OWNER").length;
@@ -66,15 +93,16 @@ export default async function UsersPage() {
       <div className="mt-8 grid gap-6 2xl:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
           <SectionCard>
-            <SectionTitle title="Team members" description="Change a role here and the app updates both database access and Clerk metadata." />
+            <SectionTitle title="Team members" description="Role changes update app access, and owner access stays locked to the configured owner email." />
             <div className="mt-6 space-y-3">
               {users.length ? users.map((user) => (
-                <div key={user.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div key={user.clerkUserId} className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-3">
-                        <p className="font-medium text-white">{user.name || "Unnamed user"}</p>
+                        <p className="font-medium text-white">{user.name}</p>
                         <span className={`rounded-full px-3 py-1 text-xs ${roleClasses(user.role)}`}>{user.role}</span>
+                        {!user.synced ? <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">Awaiting sync</span> : null}
                       </div>
                       <p className="mt-2 text-sm text-zinc-300">{user.email}</p>
                       <div className="mt-3 flex flex-wrap gap-4 text-xs text-zinc-500">
@@ -83,9 +111,19 @@ export default async function UsersPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-2 lg:min-w-40">
+                    <div className="flex flex-col gap-2 lg:min-w-44">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">Role</p>
-                      {hasPermission("manageRoles") ? <UserRoleSelect userId={user.id} value={user.role} /> : <span className="text-zinc-500">No access</span>}
+                      {user.lockedOwner ? (
+                        <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-200">
+                          Owner locked
+                        </div>
+                      ) : hasPermission("manageRoles") && user.synced ? (
+                        <UserRoleSelect userId={user.id} value={user.role} />
+                      ) : (
+                        <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-zinc-500">
+                          {user.synced ? "No access" : "Sign in once to sync"}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

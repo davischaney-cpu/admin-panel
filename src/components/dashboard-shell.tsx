@@ -2,6 +2,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import type { ReactNode } from "react";
 import { clerkAppearance } from "@/lib/clerk-appearance";
+import { hasPermission } from "@/lib/permissions";
 
 type DashboardShellProps = {
   children: ReactNode;
@@ -11,14 +12,16 @@ type DashboardShellProps = {
 };
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Leads", href: "/leads" },
-  { label: "Jobs", href: "/jobs" },
-  { label: "Calendar", href: "/calendar" },
-  { label: "Users", href: "/users" },
-];
+  { label: "Dashboard", href: "/dashboard", permission: "viewDashboard" },
+  { label: "Leads", href: "/leads", permission: "viewLeads" },
+  { label: "Jobs", href: "/jobs", permission: "viewJobs" },
+  { label: "Calendar", href: "/calendar", permission: "viewCalendar" },
+  { label: "Users", href: "/users", permission: "manageUsers" },
+] as const;
 
 export function DashboardShell({ children, email, role, currentPath = "/" }: DashboardShellProps) {
+  const visibleNavItems = navItems.filter((item) => hasPermission(role, item.permission));
+
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-zinc-50">
       <div className="grid min-h-screen lg:grid-cols-[260px_1fr]">
@@ -30,7 +33,7 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
           </div>
 
           <nav className="mt-10 space-y-2 text-sm">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const isActive = item.href === currentPath || currentPath.startsWith(`${item.href}/`);
               const baseClasses = isActive
                 ? "bg-white text-black"

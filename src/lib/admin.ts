@@ -1,8 +1,13 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { hasPermission, normalizeRole } from "@/lib/permissions";
+import { syncCurrentUser } from "@/lib/sync-user";
 
 export async function getAdminContext() {
   const { userId, sessionClaims } = await auth();
+
+  if (userId) {
+    await syncCurrentUser();
+  }
   const metadata = typeof sessionClaims?.metadata === "object" && sessionClaims?.metadata
     ? sessionClaims.metadata as Record<string, unknown>
     : null;

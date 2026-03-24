@@ -1,5 +1,7 @@
+import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-button";
 import { CreateLeadForm } from "@/components/create-lead-form";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { LeadStatusActions } from "@/components/lead-status-actions";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -82,6 +84,7 @@ export default async function LeadsPage() {
                 <th className="pb-3 font-medium">Source</th>
                 <th className="pb-3 font-medium">Next follow-up</th>
                 <th className="pb-3 font-medium">Value</th>
+                <th className="pb-3 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -93,15 +96,27 @@ export default async function LeadsPage() {
                   </td>
                   <td className="py-4 text-zinc-300">{lead.serviceType}</td>
                   <td className="py-4">
-                    <span className={`rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
+                    <div className="flex flex-col gap-2">
+                      <span className={`w-fit rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
+                      <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
+                    </div>
                   </td>
                   <td className="py-4 text-zinc-300">{lead.source}</td>
                   <td className="py-4 text-zinc-300">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "—"}</td>
                   <td className="py-4 text-zinc-300">{formatCurrency(lead.estimatedCents)}</td>
+                  <td className="py-4">
+                    <CreateJobFromLeadButton
+                      leadId={lead.id}
+                      fullName={lead.fullName}
+                      serviceType={lead.serviceType}
+                      estimatedCents={lead.estimatedCents}
+                      location={lead.location}
+                    />
+                  </td>
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-zinc-500">No leads yet. Next step is adding lead creation and import flows.</td>
+                  <td colSpan={7} className="py-10 text-center text-zinc-500">No leads yet. Next step is adding lead creation and import flows.</td>
                 </tr>
               )}
             </tbody>

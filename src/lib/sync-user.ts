@@ -1,4 +1,5 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
+import type { User as ClerkUser } from "@clerk/backend";
 import { Role } from "@prisma/client";
 import { db } from "@/lib/db";
 import { isOwnerEmail } from "@/lib/owner";
@@ -72,6 +73,27 @@ export async function syncUserToDatabase(payload: SyncPayload) {
   });
 }
 
+function getPrimaryEmailFromClerkUser(user: ClerkUser) {
+  return user.emailAddresses.find((entry) => entry.id === user.primaryEmailAddressId)?.emailAddress
+    ?? user.emailAddresses[0]?.emailAddress
+    ?? null;
+}
+
+export async function syncClerkUser(user: ClerkUser) {
+  const email = getPrimaryEmailFromClerkUser(user);
+
+  if (!email) {
+    return null;
+  }
+
+  return syncUserToDatabase({
+    clerkUserId: user.id,
+    email,
+    name: [user.firstName, user.lastName].filter(Boolean).join(" ") || user.username,
+    role: typeof user.publicMetadata?.role === "string" ? user.publicMetadata.role : null,
+  });
+}
+
 export async function syncCurrentUser() {
   const { userId } = await auth();
 
@@ -85,16 +107,5 @@ export async function syncCurrentUser() {
     return null;
   }
 
-  const primaryEmail = user.primaryEmailAddress?.emailAddress;
-
-  if (!primaryEmail) {
-    return null;
-  }
-
-  return syncUserToDatabase({
-    clerkUserId: user.id,
-    email: primaryEmail,
-    name: [user.firstName, user.lastName].filter(Boolean).join(" ") || user.username,
-    role: typeof user.publicMetadata?.role === "string" ? user.publicMetadata.role : null,
-  });
+  return syncClerkUser(user);
 }

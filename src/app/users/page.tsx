@@ -9,6 +9,7 @@ import { UnauthorizedState } from "@/components/unauthorized-state";
 import { UserRoleSelect } from "@/components/user-role-select";
 import { getRolePermissions, normalizeRole } from "@/lib/permissions";
 import { isOwnerEmail } from "@/lib/owner";
+import { syncClerkUser } from "@/lib/sync-user";
 
 function roleClasses(role: string) {
   switch (role) {
@@ -46,7 +47,20 @@ export default async function UsersPage() {
   ]);
 
   const clerkUsers = await clerk.users.getUserList({ limit: 100 });
-  const dbByClerkId = new Map(dbUsers.map((user) => [user.clerkUserId, user]));
+
+  await Promise.all(
+    clerkUsers.data.map(async (clerkUser) => {
+      const primaryEmail = clerkUser.emailAddresses.find((entry) => entry.id === clerkUser.primaryEmailAddressId)?.emailAddress
+        ?? clerkUser.emailAddresses[0]?.emailAddress
+        ?? null;
+
+      if (!primaryEmail) return;
+      await syncClerkUser(clerkUser);
+    }),
+  );
+
+  const freshDbUsers = await db.user.findMany({ orderBy: [{ role: "asc" }, { createdAt: "desc" }] });
+  const dbByClerkId = new Map(freshDbUsers.map((user) => [user.clerkUserId, user]));
 
   const users = clerkUsers.data.map((clerkUser) => {
     const primaryEmail = clerkUser.emailAddresses.find((entry) => entry.id === clerkUser.primaryEmailAddressId)?.emailAddress

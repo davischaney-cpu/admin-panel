@@ -63,9 +63,9 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
     <DashboardShell email={email} role={role} currentPath="/calendar">
       <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Operations calendar</p>
+          <p className="text-sm text-zinc-400">Scheduling</p>
           <h2 className="mt-1 text-3xl font-semibold tracking-tight">Jobs calendar</h2>
-          <p className="mt-2 text-sm text-zinc-500">See booked work by day so nothing slips through the cracks.</p>
+          <p className="mt-2 text-sm text-zinc-500">See booked work by day and keep the week from getting messy.</p>
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
@@ -138,12 +138,16 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
             <p className="mt-1 text-sm text-zinc-500">{activeJobs.length ? `${activeJobs.length} job${activeJobs.length === 1 ? "" : "s"}` : "No jobs scheduled"}</p>
             <div className="mt-5 space-y-3">
               {activeJobs.length ? activeJobs.map((job) => (
-                <div key={job.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <Link key={job.id} href={`/jobs/${job.id}`} className="block rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
                   <p className="font-medium">{job.title}</p>
                   <p className="mt-1 text-sm text-zinc-400">{job.lead?.fullName || "No linked customer"}</p>
                   <p className="mt-2 text-sm text-zinc-500">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
+                </Link>
+              )) : (
+                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
+                  Nothing booked for this day. Jobs you schedule will appear here automatically.
                 </div>
-              )) : <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">Nothing booked for this day.</div>}
+              )}
             </div>
           </div>
         </aside>

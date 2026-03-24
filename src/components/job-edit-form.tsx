@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/toast-provider";
 
 const statusOptions = ["DRAFT", "QUOTED", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"] as const;
 
@@ -30,8 +31,8 @@ export function JobEditForm({
   };
 }) {
   const router = useRouter();
+  const { showToast } = useToast();
   const [pending, startTransition] = useTransition();
-  const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: initial.title,
     serviceType: initial.serviceType,
@@ -45,7 +46,6 @@ export function JobEditForm({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage(null);
 
     const response = await fetch(`/api/jobs/${jobId}`, {
       method: "PATCH",
@@ -65,7 +65,7 @@ export function JobEditForm({
     const data = await response.json() as { error?: string };
 
     startTransition(() => {
-      setMessage(response.ok ? "Job updated." : data.error ?? "Could not update job.");
+      showToast(response.ok ? "Job updated." : data.error ?? "Could not update job.");
       router.refresh();
     });
   }
@@ -94,7 +94,6 @@ export function JobEditForm({
         <button type="submit" disabled={pending} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 disabled:opacity-60">
           {pending ? "Saving..." : "Save job"}
         </button>
-        {message ? <p className="text-sm text-zinc-400">{message}</p> : null}
       </div>
     </form>
   );

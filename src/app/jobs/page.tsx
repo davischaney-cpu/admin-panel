@@ -78,7 +78,7 @@ export default async function JobsPage() {
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan={5} className="py-10 text-center text-zinc-500">No jobs yet. Next step is building quote-to-booked workflows.</td>
+                  <td colSpan={5} className="py-10 text-center text-zinc-500">No jobs yet. Convert a lead into a job from the Leads page and it will show up here.</td>
                 </tr>
               )}
             </tbody>

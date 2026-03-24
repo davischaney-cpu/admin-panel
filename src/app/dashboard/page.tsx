@@ -66,9 +66,9 @@ export default async function DashboardPage() {
     <DashboardShell email={email} role={role} currentPath="/dashboard">
       <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Home service CRM</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Don’t let hot leads go cold</h2>
-          <p className="mt-2 text-sm text-zinc-500">Track leads, follow-ups, quotes, and booked jobs without the chaos.</p>
+          <p className="text-sm text-zinc-400">Operations overview</p>
+          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Run the day without losing the thread</h2>
+          <p className="mt-2 text-sm text-zinc-500">See the pipeline, today’s follow-ups, and upcoming jobs at a glance.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href="/leads" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200">Open leads</Link>

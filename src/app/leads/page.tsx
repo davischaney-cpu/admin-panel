@@ -70,7 +70,7 @@ export default async function LeadsPage() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 xl:grid-cols-[0.95fr_1.4fr]">
+      <div className="mt-8 grid gap-6 xl:grid-cols-[0.85fr_1.5fr]">
         <CreateLeadPanel />
 
         <div className="space-y-6">

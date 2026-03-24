@@ -2,13 +2,14 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/toast-provider";
 
 const sourceOptions = ["WEBSITE", "INSTAGRAM", "FACEBOOK", "GOOGLE", "REFERRAL", "PHONE"] as const;
 
 export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
+  const { showToast } = useToast();
   const [pending, startTransition] = useTransition();
-  const [message, setMessage] = useState<string | null>(null);
   const [form, setForm] = useState({
     fullName: "",
     phone: "",
@@ -22,7 +23,6 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage(null);
 
     const response = await fetch("/api/leads", {
       method: "POST",
@@ -43,7 +43,7 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
 
     startTransition(() => {
       if (response.ok) {
-        setMessage("Lead created.");
+        showToast("Lead created.");
         setForm({
           fullName: "",
           phone: "",
@@ -56,7 +56,7 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
         });
         router.refresh();
       } else {
-        setMessage(data.error ?? "Could not create lead.");
+        showToast(data.error ?? "Could not create lead.");
       }
     });
   }
@@ -87,7 +87,6 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
         <button type="submit" disabled={pending} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60">
           {pending ? "Creating..." : "Create lead"}
         </button>
-        {message ? <p className="text-sm text-zinc-400">{message}</p> : null}
       </div>
     </form>
   );

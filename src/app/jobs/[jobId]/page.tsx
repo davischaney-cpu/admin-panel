@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { JobEditForm } from "@/components/job-edit-form";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -75,13 +76,19 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
         </div>
 
         <aside className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Next actions</h3>
-            <div className="mt-4 space-y-3 text-sm text-zinc-300">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Add job editing so scheduled date, notes, and status can be updated from this page.</div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">Add messaging automation so booked customers get reminders before the appointment.</div>
-            </div>
-          </div>
+          <JobEditForm
+            jobId={job.id}
+            initial={{
+              title: job.title,
+              serviceType: job.serviceType,
+              status: job.status,
+              scheduledFor: job.scheduledFor?.toISOString() ?? null,
+              quotedCents: job.quotedCents,
+              finalCents: job.finalCents,
+              address: job.address,
+              notes: job.notes,
+            }}
+          />
         </aside>
       </div>
     </DashboardShell>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PublicLeadCaptureForm } from "@/components/public-lead-capture-form";
 
 const highlights = [
   "Pipeline board for leads and follow-ups",
@@ -46,27 +47,43 @@ export default function LandingPage() {
               <p>Most small operators do not need Salesforce. They need one place to see new inquiries, quotes waiting on approval, callbacks due today, and jobs already booked.</p>
               <p>DavyG CRM is shaped around that exact workflow: lead in, follow-up fast, quote, book, complete.</p>
             </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {[
+                ["Starter", "$29/mo", "Single operator, pipeline, follow-ups, and jobs calendar."],
+                ["Pro", "$79/mo", "More automation, richer job workflows, and better reporting."],
+                ["Team", "$149/mo", "Multiple users, deeper workflow controls, and team ops visibility."],
+              ].map(([name, price, copy]) => (
+                <div key={name} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                  <p className="text-sm text-zinc-400">{name}</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">{price}</p>
+                  <p className="mt-2 text-sm text-zinc-400">{copy}</p>
+                </div>
+              ))}
+            </div>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/sign-up" className="rounded-xl bg-cyan-300 px-4 py-2 text-sm font-medium text-black hover:bg-cyan-200">Create account</Link>
               <Link href="/login" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">Log in</Link>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-black/20 p-8">
-            <p className="text-sm text-zinc-400">Core features</p>
-            <div className="mt-5 space-y-4">
-              {[
-                ["Leads", "Track source, value, urgency, and next follow-up."],
-                ["Pipeline", "Move inquiries from new to booked without losing context."],
-                ["Jobs", "Convert leads into booked work and keep the calendar clean."],
-                ["Calendar", "See scheduled jobs by day and stay ahead of crew chaos."],
-              ].map(([title, copy]) => (
-                <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <h3 className="font-medium text-white">{title}</h3>
-                  <p className="mt-2 text-sm text-zinc-400">{copy}</p>
-                </div>
-              ))}
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-white/10 bg-black/20 p-8">
+              <p className="text-sm text-zinc-400">Core features</p>
+              <div className="mt-5 space-y-4">
+                {[
+                  ["Leads", "Track source, value, urgency, and next follow-up."],
+                  ["Pipeline", "Move inquiries from new to booked without losing context."],
+                  ["Jobs", "Convert leads into booked work and keep the calendar clean."],
+                  ["Calendar", "See scheduled jobs by day and stay ahead of crew chaos."],
+                ].map(([title, copy]) => (
+                  <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <h3 className="font-medium text-white">{title}</h3>
+                    <p className="mt-2 text-sm text-zinc-400">{copy}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+            <PublicLeadCaptureForm />
           </div>
         </div>
       </section>

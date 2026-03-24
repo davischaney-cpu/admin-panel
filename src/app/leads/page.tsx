@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-button";
 import { CreateLeadForm } from "@/components/create-lead-form";
 import { DashboardShell } from "@/components/dashboard-shell";
@@ -96,7 +97,7 @@ export default async function LeadsPage() {
               {leads.length ? leads.map((lead) => (
                 <tr key={lead.id} className="border-b border-white/5 last:border-0">
                   <td className="py-4">
-                    <p className="font-medium">{lead.fullName}</p>
+                    <Link href={`/leads/${lead.id}`} className="font-medium hover:text-cyan-200">{lead.fullName}</Link>
                     <p className="text-zinc-400">{lead.phone || lead.email || "No contact info"}</p>
                   </td>
                   <td className="py-4 text-zinc-300">{lead.serviceType}</td>

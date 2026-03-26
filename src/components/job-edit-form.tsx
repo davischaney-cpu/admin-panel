@@ -38,6 +38,7 @@ export function JobEditForm({
   const router = useRouter();
   const { showToast } = useToast();
   const [pending, startTransition] = useTransition();
+  const [savingLabel, setSavingLabel] = useState("Save job");
   const emptyState = {
     title: initial.title,
     serviceType: initial.serviceType,
@@ -58,6 +59,8 @@ export function JobEditForm({
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setSavingLabel("Saving...");
+    showToast("Saving job changes...");
 
     const response = await fetch(`/api/jobs/${jobId}`, {
       method: "PATCH",
@@ -79,9 +82,16 @@ export function JobEditForm({
     const data = (await response.json()) as { error?: string };
 
     startTransition(() => {
-      showToast(response.ok ? "Job updated." : data.error ?? "Could not update job.");
-      if (response.ok) clearDraft(`job-edit-draft:${jobId}`);
+      if (response.ok) {
+        setSavingLabel("Saved ✓");
+        showToast("Job updated.");
+        clearDraft(`job-edit-draft:${jobId}`);
+      } else {
+        setSavingLabel("Save job");
+        showToast(data.error ?? "Could not update job.");
+      }
       router.refresh();
+      setTimeout(() => setSavingLabel("Save job"), 1600);
     });
   }
 
@@ -113,7 +123,7 @@ export function JobEditForm({
       </div>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
         <button type="submit" disabled={pending} className="rounded-xl bg-[#163f87] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#12346f] disabled:opacity-60">
-          {pending ? "Saving..." : "Save job"}
+          {pending ? savingLabel : savingLabel}
         </button>
         <p className="text-xs text-slate-600">Draft autosaves locally while you edit.</p>
       </div>

@@ -66,50 +66,50 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={compact ? "rounded-3xl border border-white/10 bg-black/20 p-4" : "rounded-3xl border border-white/10 bg-white/5 p-6"}>
+    <form onSubmit={handleSubmit} className={compact ? "rounded-[24px] border border-slate-300 bg-slate-50 p-4" : "rounded-[28px] border border-slate-300 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]"}>
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Create lead</h3>
-          <p className="text-sm text-zinc-400">Capture the basics fast, then enrich the lead later if needed.</p>
+          <h3 className="text-lg font-semibold text-slate-900">Create lead</h3>
+          <p className="text-sm text-slate-600">Capture the basics fast, then enrich the lead later if needed.</p>
         </div>
       </div>
 
       <div className="mt-6 grid gap-6">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-zinc-500">Contact</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">Contact</p>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
-            <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-            <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Service type" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-            <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
+            <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+            <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Service type" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+            <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
           </div>
         </div>
 
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-zinc-500">Deal context</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">Deal context</p>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
-            <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Location" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-            <input value={form.estimatedDollars} onChange={(e) => setForm({ ...form, estimatedDollars: e.target.value })} placeholder="Estimated value ($)" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-            <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none">
+            <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Location" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+            <input value={form.estimatedDollars} onChange={(e) => setForm({ ...form, estimatedDollars: e.target.value })} placeholder="Estimated value ($)" className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
+            <select value={form.source} onChange={(e) => setForm({ ...form, source: e.target.value })} className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none">
               {sourceOptions.map((source) => <option key={source} value={source}>{source}</option>)}
             </select>
-            <select value={form.urgency} onChange={(e) => setForm({ ...form, urgency: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none">
+            <select value={form.urgency} onChange={(e) => setForm({ ...form, urgency: e.target.value })} className="rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none">
               {urgencyOptions.map((urgency) => <option key={urgency} value={urgency}>{urgency}</option>)}
             </select>
           </div>
         </div>
 
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-zinc-500">Notes</p>
-          <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="What does the customer need? What matters? Any timing notes?" className="mt-3 min-h-28 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500 w-full" />
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-600">Notes</p>
+          <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="What does the customer need? What matters? Any timing notes?" className="mt-3 min-h-28 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400" />
         </div>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={pending} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
           {pending ? "Creating..." : "Create lead"}
         </button>
-        <p className="text-xs text-zinc-500">A follow-up is automatically scheduled for tomorrow so nothing falls through the cracks.</p>
+        <p className="text-xs text-slate-600">A follow-up is automatically scheduled for tomorrow so nothing falls through the cracks.</p>
       </div>
     </form>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { clerkAppearance } from "@/lib/clerk-appearance";
 import { hasPermission } from "@/lib/permissions";
 
@@ -23,6 +23,12 @@ const navItems = [
 
 export function DashboardShell({ children, email, role, currentPath = "/" }: DashboardShellProps) {
   const visibleNavItems = navItems.filter((item) => hasPermission(role, item.permission));
+  const userButtonRef = useRef<HTMLDivElement | null>(null);
+
+  function openUserMenu() {
+    const trigger = userButtonRef.current?.querySelector("button");
+    trigger?.click();
+  }
 
   return (
     <main className="min-h-screen text-slate-900">
@@ -48,15 +54,19 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
                     </Link>
                   );
                 })}
-                <Link href="/user" className="ml-1 flex items-center gap-3 rounded-2xl bg-white px-3 py-2 transition hover:bg-blue-50">
+                <button
+                  type="button"
+                  onClick={openUserMenu}
+                  className="ml-1 flex items-center gap-3 rounded-2xl bg-white px-3 py-2 transition hover:bg-blue-50"
+                >
                   <div className="hidden text-right sm:block">
                     <p className="text-sm font-medium text-slate-900">{role ? `${role[0].toUpperCase()}${role.slice(1)}` : "Account"}</p>
-                    <p className="text-xs text-slate-500">Profile & settings</p>
+                    <p className="text-xs text-slate-500">Open menu</p>
                   </div>
-                  <div onClick={(event) => event.preventDefault()}>
+                  <div ref={userButtonRef} onClick={(event) => event.stopPropagation()}>
                     <UserButton appearance={clerkAppearance} userProfileMode="navigation" userProfileUrl="/user" />
                   </div>
-                </Link>
+                </button>
               </div>
             </div>
           </div>

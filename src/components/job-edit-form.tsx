@@ -79,33 +79,33 @@ export function JobEditForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <form onSubmit={handleSubmit} className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Edit job</h3>
-          <p className="text-sm text-zinc-400">Update scheduling, quote flow, invoice flow, value, and notes.</p>
+          <h3 className="text-lg font-semibold text-slate-900">Edit job</h3>
+          <p className="text-sm text-slate-700">Update scheduling, quote flow, invoice flow, value, and notes.</p>
         </div>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Job title" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Service type" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none" />
-        <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none">
+        <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Job title" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Service type" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })} className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none">
           {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
         </select>
-        <input type="datetime-local" value={form.scheduledFor} onChange={(e) => setForm({ ...form, scheduledFor: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none" />
-        <select value={form.quoteStatus} onChange={(e) => setForm({ ...form, quoteStatus: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none">
+        <input type="datetime-local" value={form.scheduledFor} onChange={(e) => setForm({ ...form, scheduledFor: e.target.value })} className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <select value={form.quoteStatus} onChange={(e) => setForm({ ...form, quoteStatus: e.target.value })} className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none">
           {quoteStatusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
         </select>
-        <select value={form.invoiceStatus} onChange={(e) => setForm({ ...form, invoiceStatus: e.target.value })} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none">
+        <select value={form.invoiceStatus} onChange={(e) => setForm({ ...form, invoiceStatus: e.target.value })} className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none">
           {invoiceStatusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
         </select>
-        <input value={form.quotedDollars} onChange={(e) => setForm({ ...form, quotedDollars: e.target.value })} placeholder="Quoted value ($)" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.finalDollars} onChange={(e) => setForm({ ...form, finalDollars: e.target.value })} placeholder="Final value ($)" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Address" className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none sm:col-span-2" />
-        <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Notes" className="min-h-32 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white outline-none sm:col-span-2" />
+        <input value={form.quotedDollars} onChange={(e) => setForm({ ...form, quotedDollars: e.target.value })} placeholder="Quoted value ($)" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.finalDollars} onChange={(e) => setForm({ ...form, finalDollars: e.target.value })} placeholder="Final value ($)" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} placeholder="Address" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none sm:col-span-2" />
+        <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Notes" className="min-h-32 rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none sm:col-span-2" />
       </div>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={pending} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black hover:bg-zinc-200 disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded-xl bg-[#163f87] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#12346f] disabled:opacity-60">
           {pending ? "Saving..." : "Save job"}
         </button>
       </div>

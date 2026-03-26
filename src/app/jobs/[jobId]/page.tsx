@@ -32,60 +32,62 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
 
   return (
     <DashboardShell email={email} role={role} currentPath="/jobs">
-      <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm text-zinc-400">Job detail</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">{job.title}</h2>
-          <p className="mt-2 text-sm text-zinc-500">{job.serviceType}</p>
+      <header className="rounded-[30px] bg-[#0f3d91] px-6 py-6 text-white shadow-[0_18px_50px_rgba(15,61,145,0.22)]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-sm text-blue-100/85">Job detail</p>
+            <h2 className="mt-1 text-3xl font-semibold tracking-tight">{job.title}</h2>
+            <p className="mt-2 text-sm text-blue-100/85">{job.serviceType}</p>
+          </div>
+          <Link href="/jobs" className="rounded-2xl bg-white px-4 py-2.5 text-sm font-medium text-[#0f3d91] transition hover:bg-blue-50">Back to jobs</Link>
         </div>
-        <Link href="/jobs" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">Back to jobs</Link>
       </header>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Job summary</h3>
+          <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+            <h3 className="text-lg font-semibold text-slate-900">Job summary</h3>
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Customer</p>
-                <p className="mt-2 font-medium">{job.lead?.fullName || "No linked lead"}</p>
-                <p className="mt-1 text-sm text-zinc-500">{job.lead?.phone || job.lead?.email || "No contact info"}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Customer</p>
+                <p className="mt-2 font-semibold text-slate-900">{job.lead?.fullName || "No linked lead"}</p>
+                <p className="mt-1 text-sm text-slate-700">{job.lead?.phone || job.lead?.email || "No contact info"}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Status</p>
-                <p className="mt-2 font-medium">{job.status}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Status</p>
+                <p className="mt-2 font-semibold text-slate-900">{job.status}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Scheduled</p>
-                <p className="mt-2 font-medium">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Scheduled</p>
+                <p className="mt-2 font-semibold text-slate-900">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Value</p>
-                <p className="mt-2 font-medium">{formatCurrency(job.finalCents ?? job.quotedCents)}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Value</p>
+                <p className="mt-2 font-semibold text-slate-900">{formatCurrency(job.finalCents ?? job.quotedCents)}</p>
               </div>
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-amber-400/15 bg-amber-400/10 p-4">
-                <p className="text-sm text-amber-100/80">Quote status</p>
-                <p className="mt-2 font-medium text-white">{job.quoteStatus}</p>
-                <p className="mt-1 text-xs text-amber-100/60">{job.quotedAt ? `Sent ${formatDateTime(job.quotedAt)}` : "Not sent yet"}</p>
+              <div className="rounded-2xl bg-[#fff6df] p-4">
+                <p className="text-sm text-amber-800">Quote status</p>
+                <p className="mt-2 font-semibold text-slate-900">{job.quoteStatus}</p>
+                <p className="mt-1 text-xs text-amber-900/70">{job.quotedAt ? `Sent ${formatDateTime(job.quotedAt)}` : "Not sent yet"}</p>
               </div>
-              <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4">
-                <p className="text-sm text-emerald-100/80">Invoice status</p>
-                <p className="mt-2 font-medium text-white">{job.invoiceStatus}</p>
-                <p className="mt-1 text-xs text-emerald-100/60">{job.invoicePaidAt ? `Paid ${formatDateTime(job.invoicePaidAt)}` : job.invoiceSentAt ? `Sent ${formatDateTime(job.invoiceSentAt)}` : "No invoice activity yet"}</p>
+              <div className="rounded-2xl bg-[#eaf9f1] p-4">
+                <p className="text-sm text-emerald-800">Invoice status</p>
+                <p className="mt-2 font-semibold text-slate-900">{job.invoiceStatus}</p>
+                <p className="mt-1 text-xs text-emerald-900/70">{job.invoicePaidAt ? `Paid ${formatDateTime(job.invoicePaidAt)}` : job.invoiceSentAt ? `Sent ${formatDateTime(job.invoiceSentAt)}` : "No invoice activity yet"}</p>
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Address</p>
-              <p className="mt-2 text-sm text-zinc-200">{job.address || "No address yet"}</p>
+            <div className="mt-6 rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+              <p className="text-sm text-slate-600">Address</p>
+              <p className="mt-2 text-sm text-slate-800">{job.address || "No address yet"}</p>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Notes</p>
-              <p className="mt-2 text-sm text-zinc-200">{job.notes || "No notes yet"}</p>
+            <div className="mt-6 rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+              <p className="text-sm text-slate-600">Notes</p>
+              <p className="mt-2 text-sm text-slate-800">{job.notes || "No notes yet"}</p>
             </div>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               }}
             />
           ) : (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-sm text-zinc-500">
+            <div className="rounded-[30px] border border-blue-200 bg-[#e8f1ff] p-6 text-sm text-slate-700">
               You can view this job, but your role cannot edit it.
             </div>
           )}

@@ -21,11 +21,11 @@ function formatCurrency(cents?: number | null) {
 function urgencyClasses(urgency: string) {
   switch (urgency) {
     case "HIGH":
-      return "bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/20";
+      return "bg-rose-100 text-rose-800";
     case "LOW":
-      return "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/20";
+      return "bg-emerald-100 text-emerald-800";
     default:
-      return "bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/20";
+      return "bg-amber-100 text-amber-800";
   }
 }
 
@@ -46,83 +46,85 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
 
   return (
     <DashboardShell email={email} role={role} currentPath="/leads">
-      <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-sm text-zinc-400">Lead detail</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">{lead.fullName}</h2>
-          <p className="mt-2 text-sm text-zinc-500">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+      <header className="rounded-[30px] bg-[#0f3d91] px-6 py-6 text-white shadow-[0_18px_50px_rgba(15,61,145,0.22)]">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="text-sm text-blue-100/85">Lead detail</p>
+            <h2 className="mt-1 text-3xl font-semibold tracking-tight">{lead.fullName}</h2>
+            <p className="mt-2 text-sm text-blue-100/85">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+          </div>
+          <Link href="/leads" className="rounded-2xl bg-white px-4 py-2.5 text-sm font-medium text-[#0f3d91] transition hover:bg-blue-50">Back to leads</Link>
         </div>
-        <Link href="/leads" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10">Back to leads</Link>
       </header>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">{lead.status}</span>
-              <span className={`rounded-full px-3 py-1 text-xs ${urgencyClasses(lead.urgency)}`}>{lead.urgency} priority</span>
-              <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">{lead.source}</span>
+              <span className="rounded-full bg-[#163f87] px-3 py-1 text-xs font-medium text-white">{lead.status}</span>
+              <span className={`rounded-full px-3 py-1 text-xs font-medium ${urgencyClasses(lead.urgency)}`}>{lead.urgency} priority</span>
+              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">{lead.source}</span>
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Contact</p>
-                <p className="mt-2 font-medium">{lead.phone || "No phone"}</p>
-                <p className="mt-1 text-sm text-zinc-500">{lead.email || "No email"}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Contact</p>
+                <p className="mt-2 font-semibold text-slate-900">{lead.phone || "No phone"}</p>
+                <p className="mt-1 text-sm text-slate-700">{lead.email || "No email"}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Estimated value</p>
-                <p className="mt-2 font-medium">{formatCurrency(lead.estimatedCents)}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Estimated value</p>
+                <p className="mt-2 font-semibold text-slate-900">{formatCurrency(lead.estimatedCents)}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Created</p>
-                <p className="mt-2 font-medium">{formatDateTime(lead.createdAt)}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Created</p>
+                <p className="mt-2 font-semibold text-slate-900">{formatDateTime(lead.createdAt)}</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <p className="text-sm text-zinc-400">Next follow-up</p>
-                <p className="mt-2 font-medium">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "Not scheduled"}</p>
+              <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+                <p className="text-sm text-slate-600">Next follow-up</p>
+                <p className="mt-2 font-semibold text-slate-900">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "Not scheduled"}</p>
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Notes</p>
-              <p className="mt-2 text-sm text-zinc-200">{lead.notes || "No notes yet"}</p>
+            <div className="mt-6 rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
+              <p className="text-sm text-slate-600">Notes</p>
+              <p className="mt-2 text-sm text-slate-800">{lead.notes || "No notes yet"}</p>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Quote & booking progress</h3>
-              <span className="text-sm text-zinc-500">{lead.jobs.length} linked job{lead.jobs.length === 1 ? "" : "s"}</span>
+              <h3 className="text-lg font-semibold text-slate-900">Quote & booking progress</h3>
+              <span className="text-sm text-slate-700">{lead.jobs.length} linked job{lead.jobs.length === 1 ? "" : "s"}</span>
             </div>
 
             {activeJob ? (
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl border border-amber-400/15 bg-amber-400/10 p-4">
-                  <p className="text-sm text-amber-100/80">Quote</p>
-                  <p className="mt-2 font-medium text-white">{activeJob.quoteStatus}</p>
+                <div className="rounded-2xl bg-[#fff6df] p-4">
+                  <p className="text-sm text-amber-800">Quote</p>
+                  <p className="mt-2 font-semibold text-slate-900">{activeJob.quoteStatus}</p>
                 </div>
-                <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-4">
-                  <p className="text-sm text-cyan-100/80">Job</p>
-                  <p className="mt-2 font-medium text-white">{activeJob.status}</p>
+                <div className="rounded-2xl bg-[#e9f4ff] p-4">
+                  <p className="text-sm text-sky-800">Job</p>
+                  <p className="mt-2 font-semibold text-slate-900">{activeJob.status}</p>
                 </div>
-                <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4">
-                  <p className="text-sm text-emerald-100/80">Invoice</p>
-                  <p className="mt-2 font-medium text-white">{activeJob.invoiceStatus}</p>
+                <div className="rounded-2xl bg-[#eaf9f1] p-4">
+                  <p className="text-sm text-emerald-800">Invoice</p>
+                  <p className="mt-2 font-semibold text-slate-900">{activeJob.invoiceStatus}</p>
                 </div>
               </div>
             ) : (
-              <div className="mt-5 rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
+              <div className="mt-5 rounded-2xl border border-dashed border-blue-200 bg-[#f7fbff] p-4 text-sm text-slate-700">
                 No quote or job yet. Create one from the actions panel when this lead is ready.
               </div>
             )}
 
             <div className="mt-5 space-y-3">
               {lead.jobs.length ? lead.jobs.map((job) => (
-                <Link key={job.id} href={`/jobs/${job.id}`} className="block rounded-2xl border border-white/10 bg-black/20 p-4 hover:bg-white/10">
-                  <p className="font-medium">{job.title}</p>
-                  <p className="mt-1 text-sm text-zinc-400">{job.status} • {job.quoteStatus} quote • {job.invoiceStatus} invoice</p>
-                  <p className="mt-1 text-xs text-zinc-500">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
+                <Link key={job.id} href={`/jobs/${job.id}`} className="block rounded-2xl border border-blue-200 bg-[#f7fbff] p-4 hover:bg-[#eef5ff]">
+                  <p className="font-semibold text-slate-900">{job.title}</p>
+                  <p className="mt-1 text-sm text-slate-700">{job.status} • {job.quoteStatus} quote • {job.invoiceStatus} invoice</p>
+                  <p className="mt-1 text-xs text-[#163f87]">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
                 </Link>
               )) : null}
             </div>
@@ -130,25 +132,25 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
         </div>
 
         <aside className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Actions</h3>
+          <div className="rounded-[30px] border border-blue-200 bg-[#e8f1ff] p-6 shadow-[0_12px_40px_rgba(15,23,42,0.05)]">
+            <h3 className="text-lg font-semibold text-slate-900">Actions</h3>
             <div className="mt-4 space-y-4">
               {hasPermission("editLeads") ? (
                 <div>
-                  <p className="mb-2 text-sm text-zinc-400">Status</p>
+                  <p className="mb-2 text-sm text-slate-600">Status</p>
                   <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
                 </div>
               ) : null}
               {hasPermission("editLeads") ? (
                 <div>
-                  <p className="mb-2 text-sm text-zinc-400">Next follow-up</p>
+                  <p className="mb-2 text-sm text-slate-600">Next follow-up</p>
                   <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
                 </div>
               ) : null}
               {hasPermission("convertLeads") ? (
                 <CreateJobFromLeadButton leadId={lead.id} fullName={lead.fullName} serviceType={lead.serviceType} estimatedCents={lead.estimatedCents} location={lead.location} />
               ) : (
-                <div className="text-sm text-zinc-500">Your role can view this lead but cannot convert it into a job.</div>
+                <div className="text-sm text-slate-700">Your role can view this lead but cannot convert it into a job.</div>
               )}
             </div>
           </div>

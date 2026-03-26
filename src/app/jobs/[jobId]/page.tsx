@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ActivityTimeline } from "@/components/activity-timeline";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { JobEditForm } from "@/components/job-edit-form";
+import { QuoteActions } from "@/components/quote-actions";
 import { QuoteBuilder } from "@/components/quote-builder";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
@@ -97,6 +98,18 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
             <div className="mt-6 rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
               <p className="text-sm text-slate-600">Notes</p>
               <p className="mt-2 text-sm text-slate-800">{job.notes || "No notes yet"}</p>
+            </div>
+          </div>
+
+          <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900">Quote workflow</h3>
+                <p className="text-sm text-slate-700">Once the quote looks right, move it through the real customer flow.</p>
+              </div>
+            </div>
+            <div className="mt-5">
+              <QuoteActions jobId={job.id} quoteStatus={job.quoteStatus} />
             </div>
           </div>
 

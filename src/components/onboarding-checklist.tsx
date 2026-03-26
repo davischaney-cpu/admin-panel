@@ -34,30 +34,30 @@ export function OnboardingChecklist({ hasLeads, hasJobs, hasFollowUps }: Onboard
   const completed = steps.filter((step) => step.done).length;
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-6 shadow-[0_20px_60px_-36px_rgba(34,211,238,0.35)]">
+    <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-zinc-400">First-run setup</p>
-          <h3 className="mt-1 text-xl font-semibold">Get the CRM working for you in 3 moves</h3>
-          <p className="mt-2 text-sm text-zinc-500">This gets the pipeline live fast so the dashboard starts feeling useful immediately.</p>
+          <p className="text-sm text-slate-500">First-run setup</p>
+          <h3 className="mt-1 text-xl font-semibold text-slate-900">Get the CRM working for you in 3 moves</h3>
+          <p className="mt-2 text-sm text-slate-500">This gets the pipeline live fast so the dashboard starts feeling useful immediately.</p>
         </div>
-        <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">{completed}/3 complete</span>
+        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{completed}/3 complete</span>
       </div>
 
       <div className="mt-5 space-y-3">
         {steps.map((step) => (
-          <div key={step.title} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+          <div key={step.title} className="rounded-2xl bg-slate-50 p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${step.done ? "bg-emerald-500/20 text-emerald-300" : "bg-white/10 text-zinc-300"}`}>
+                  <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${step.done ? "bg-emerald-100 text-emerald-700" : "bg-slate-200 text-slate-600"}`}>
                     {step.done ? "✓" : "•"}
                   </span>
-                  <p className="font-medium">{step.title}</p>
+                  <p className="font-medium text-slate-900">{step.title}</p>
                 </div>
-                <p className="mt-2 text-sm text-zinc-400">{step.description}</p>
+                <p className="mt-2 text-sm text-slate-500">{step.description}</p>
               </div>
-              <Link href={step.href} className="rounded-xl border border-white/10 px-3 py-2 text-xs text-zinc-200 hover:bg-white/10">
+              <Link href={step.href} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 hover:bg-slate-50">
                 {step.cta}
               </Link>
             </div>

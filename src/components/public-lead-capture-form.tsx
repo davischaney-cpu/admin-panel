@@ -27,22 +27,22 @@ export function PublicLeadCaptureForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-black/20 p-6">
-      <h3 className="text-lg font-semibold">Request a demo / join waitlist</h3>
-      <p className="mt-2 text-sm text-zinc-400">Tell us about your workflow and we’ll show you how AdminPaneling can fit it.</p>
+    <form onSubmit={handleSubmit} className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+      <h3 className="text-lg font-semibold text-slate-900">Request a demo / join waitlist</h3>
+      <p className="mt-2 text-sm text-slate-700">Tell us about your workflow and we’ll show you how AdminPaneling can fit it.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Business / service type" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />
-        <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="City / market" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none sm:col-span-2" />
-        <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="What are you using now? What’s messy?" className="min-h-28 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none sm:col-span-2" />
+        <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Business / service type" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
+        <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="City / market" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none sm:col-span-2" />
+        <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="What are you using now? What’s messy?" className="min-h-28 rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none sm:col-span-2" />
       </div>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <button type="submit" disabled={pending} className="rounded-xl bg-cyan-300 px-4 py-2 text-sm font-medium text-black hover:bg-cyan-200 disabled:opacity-60">
+        <button type="submit" disabled={pending} className="rounded-xl bg-[#163f87] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#12346f] disabled:opacity-60">
           {pending ? "Sending..." : "Submit"}
         </button>
-        {message ? <p className="text-sm text-zinc-400">{message}</p> : null}
+        {message ? <p className="text-sm text-slate-700">{message}</p> : null}
       </div>
     </form>
   );

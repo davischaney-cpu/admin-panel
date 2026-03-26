@@ -34,11 +34,12 @@ export function OnboardingChecklist({ hasLeads, hasJobs, hasFollowUps }: Onboard
   const completed = steps.filter((step) => step.done).length;
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.03))] p-6 shadow-[0_20px_60px_-36px_rgba(34,211,238,0.35)]">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm text-zinc-400">First-run setup</p>
           <h3 className="mt-1 text-xl font-semibold">Get the CRM working for you in 3 moves</h3>
+          <p className="mt-2 text-sm text-zinc-500">This gets the pipeline live fast so the dashboard starts feeling useful immediately.</p>
         </div>
         <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">{completed}/3 complete</span>
       </div>

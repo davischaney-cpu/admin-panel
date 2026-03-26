@@ -42,36 +42,51 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
       </header>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-          <h3 className="text-lg font-semibold">Job summary</h3>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Customer</p>
-              <p className="mt-2 font-medium">{job.lead?.fullName || "No linked lead"}</p>
-              <p className="mt-1 text-sm text-zinc-500">{job.lead?.phone || job.lead?.email || "No contact info"}</p>
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <h3 className="text-lg font-semibold">Job summary</h3>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">Customer</p>
+                <p className="mt-2 font-medium">{job.lead?.fullName || "No linked lead"}</p>
+                <p className="mt-1 text-sm text-zinc-500">{job.lead?.phone || job.lead?.email || "No contact info"}</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">Status</p>
+                <p className="mt-2 font-medium">{job.status}</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">Scheduled</p>
+                <p className="mt-2 font-medium">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <p className="text-sm text-zinc-400">Value</p>
+                <p className="mt-2 font-medium">{formatCurrency(job.finalCents ?? job.quotedCents)}</p>
+              </div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Status</p>
-              <p className="mt-2 font-medium">{job.status}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Scheduled</p>
-              <p className="mt-2 font-medium">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <p className="text-sm text-zinc-400">Value</p>
-              <p className="mt-2 font-medium">{formatCurrency(job.finalCents ?? job.quotedCents)}</p>
-            </div>
-          </div>
 
-          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-zinc-400">Address</p>
-            <p className="mt-2 text-sm text-zinc-200">{job.address || "No address yet"}</p>
-          </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-amber-400/15 bg-amber-400/10 p-4">
+                <p className="text-sm text-amber-100/80">Quote status</p>
+                <p className="mt-2 font-medium text-white">{job.quoteStatus}</p>
+                <p className="mt-1 text-xs text-amber-100/60">{job.quotedAt ? `Sent ${formatDateTime(job.quotedAt)}` : "Not sent yet"}</p>
+              </div>
+              <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4">
+                <p className="text-sm text-emerald-100/80">Invoice status</p>
+                <p className="mt-2 font-medium text-white">{job.invoiceStatus}</p>
+                <p className="mt-1 text-xs text-emerald-100/60">{job.invoicePaidAt ? `Paid ${formatDateTime(job.invoicePaidAt)}` : job.invoiceSentAt ? `Sent ${formatDateTime(job.invoiceSentAt)}` : "No invoice activity yet"}</p>
+              </div>
+            </div>
 
-          <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
-            <p className="text-sm text-zinc-400">Notes</p>
-            <p className="mt-2 text-sm text-zinc-200">{job.notes || "No notes yet"}</p>
+            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-zinc-400">Address</p>
+              <p className="mt-2 text-sm text-zinc-200">{job.address || "No address yet"}</p>
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-zinc-400">Notes</p>
+              <p className="mt-2 text-sm text-zinc-200">{job.notes || "No notes yet"}</p>
+            </div>
           </div>
         </div>
 
@@ -83,6 +98,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 title: job.title,
                 serviceType: job.serviceType,
                 status: job.status,
+                quoteStatus: job.quoteStatus,
+                invoiceStatus: job.invoiceStatus,
                 scheduledFor: job.scheduledFor?.toISOString() ?? null,
                 quotedCents: job.quotedCents,
                 finalCents: job.finalCents,

@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     email?: string;
     serviceType?: string;
     source?: string;
+    urgency?: string;
     location?: string;
     estimatedCents?: number | null;
     notes?: string;
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
       email: body.email || null,
       serviceType: body.serviceType,
       source: body.source === "INSTAGRAM" || body.source === "FACEBOOK" || body.source === "GOOGLE" || body.source === "REFERRAL" || body.source === "PHONE" ? body.source : "WEBSITE",
+      urgency: body.urgency === "LOW" || body.urgency === "HIGH" ? body.urgency : "MEDIUM",
       location: body.location || null,
       estimatedCents: typeof body.estimatedCents === "number" ? body.estimatedCents : null,
       notes: body.notes || null,

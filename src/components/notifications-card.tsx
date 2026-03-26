@@ -18,10 +18,13 @@ export function NotificationsCard() {
   }
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(34,211,238,0.08),rgba(255,255,255,0.03))] p-6 shadow-[0_20px_60px_-36px_rgba(34,211,238,0.35)]">
       <p className="text-sm text-zinc-400">Notifications</p>
       <h3 className="mt-1 text-xl font-semibold">Follow-up alerts</h3>
       <p className="mt-2 text-sm text-zinc-500">Turn on reminders for overdue follow-ups and tomorrow’s jobs.</p>
+      <div className="mt-4 rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-3 text-xs text-cyan-100/80">
+        Use this as your daily accountability layer for callbacks, booked jobs, and no-drop follow-up.
+      </div>
       <div className="mt-5 space-y-3">
         <label className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm">
           <span>Email reminders</span>

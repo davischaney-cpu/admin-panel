@@ -22,6 +22,19 @@ const pricing = [
   ["Team", "$149/mo", "Multiple users, deeper workflow controls, and team ops visibility."],
 ];
 
+const trustSignals = [
+  "Built for home-service operators",
+  "Fast lead intake and follow-up workflow",
+  "Jobs, calendar, and team visibility in one place",
+  "Cleaner than spreadsheets and generic CRMs",
+];
+
+const comparisonPoints = [
+  ["Follow-up speed", "See overdue callbacks and today’s touchpoints the second you log in."],
+  ["Scheduling clarity", "Move from quote to booked job without juggling separate calendars and notes."],
+  ["Team visibility", "Owners, sales, and ops all get the context they need without extra noise."],
+];
+
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0f] text-zinc-50">
@@ -49,6 +62,14 @@ export default function LandingPage() {
                   <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-sm text-zinc-300 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
                     {item}
                   </div>
+                ))}
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {trustSignals.map((item) => (
+                  <span key={item} className="rounded-full border border-white/10 bg-black/20 px-3 py-1.5 text-xs text-zinc-300">
+                    {item}
+                  </span>
                 ))}
               </div>
             </div>
@@ -129,21 +150,36 @@ export default function LandingPage() {
 
       <section className="mx-auto max-w-6xl px-6 py-16 sm:px-10 lg:px-12">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
-            <p className="text-sm text-zinc-400">Why it sells</p>
-            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white">Stop losing leads because follow-up is messy.</h2>
-            <div className="mt-6 space-y-4 text-sm leading-7 text-zinc-300">
-              <p>Most small operators do not need Salesforce. They need one place to see new inquiries, quotes waiting on approval, callbacks due today, and jobs already booked.</p>
-              <p>DavyG CRM is shaped around that exact workflow: lead in, follow-up fast, quote, book, complete.</p>
+          <div className="space-y-6">
+            <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+              <p className="text-sm text-zinc-400">Why it sells</p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight text-white">Stop losing leads because follow-up is messy.</h2>
+              <div className="mt-6 space-y-4 text-sm leading-7 text-zinc-300">
+                <p>Most small operators do not need Salesforce. They need one place to see new inquiries, quotes waiting on approval, callbacks due today, and jobs already booked.</p>
+                <p>DavyG CRM is shaped around that exact workflow: lead in, follow-up fast, quote, book, complete.</p>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
+                {featureCards.map(([title, copy]) => (
+                  <div key={title} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <h3 className="font-medium text-white">{title}</h3>
+                    <p className="mt-2 text-sm text-zinc-400">{copy}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {featureCards.map(([title, copy]) => (
-                <div key={title} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <h3 className="font-medium text-white">{title}</h3>
-                  <p className="mt-2 text-sm text-zinc-400">{copy}</p>
-                </div>
-              ))}
+            <div className="rounded-3xl border border-white/10 bg-black/20 p-8">
+              <p className="text-sm text-zinc-400">What feels better</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">Built for operators, not enterprise theater.</h2>
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                {comparisonPoints.map(([title, copy]) => (
+                  <div key={title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <h3 className="font-medium text-white">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-zinc-400">{copy}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -163,6 +199,15 @@ export default function LandingPage() {
               </div>
             </div>
             <PublicLeadCaptureForm />
+            <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-8">
+              <p className="text-sm text-cyan-200">Ready to modernize the workflow?</p>
+              <h2 className="mt-2 text-2xl font-semibold text-white">Book a demo, seed sample data, and show the team how fast this can feel.</h2>
+              <p className="mt-3 text-sm leading-6 text-cyan-50/80">Use this page as the sales surface, then walk prospects through the live dashboard, leads pipeline, and jobs flow.</p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link href="/sign-up" className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-zinc-100">Start free</Link>
+                <Link href="/dashboard" className="rounded-xl border border-white/20 px-4 py-2 text-sm text-white transition hover:bg-white/10">View dashboard</Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

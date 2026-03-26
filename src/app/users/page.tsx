@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { clerkClient } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { getAdminContext } from "@/lib/admin";
@@ -41,10 +40,7 @@ export default async function UsersPage() {
     return <UnauthorizedState email={email} />;
   }
 
-  const [dbUsers, clerk] = await Promise.all([
-    db.user.findMany({ orderBy: [{ role: "asc" }, { createdAt: "desc" }] }),
-    clerkClient(),
-  ]);
+  const clerk = await clerkClient();
 
   const clerkUsers = await clerk.users.getUserList({ limit: 100 });
 

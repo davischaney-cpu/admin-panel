@@ -53,7 +53,35 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
         </aside>
 
         <section className="p-5 sm:p-8 lg:p-10">
-          <div className="mb-8 flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+          <div className="mb-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] lg:hidden">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">DavyG</p>
+                <p className="mt-1 text-lg font-semibold text-white">CRM workspace</p>
+              </div>
+              <UserButton appearance={clerkAppearance} userProfileMode="navigation" userProfileUrl="/user" />
+            </div>
+            <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+              {visibleNavItems.map((item) => {
+                const isActive = item.href === currentPath || currentPath.startsWith(`${item.href}/`);
+                const baseClasses = isActive
+                  ? "bg-white text-black"
+                  : "border border-white/10 bg-black/20 text-zinc-300";
+
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className={`whitespace-nowrap rounded-xl px-3 py-2 text-sm transition ${baseClasses}`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mb-8 hidden items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] lg:flex">
             <div>
               <p className="text-sm text-zinc-300">{role ? `${role[0].toUpperCase()}${role.slice(1)}` : "Account"}</p>
               <p className="text-xs text-zinc-500">{email ?? "Signed in"}</p>

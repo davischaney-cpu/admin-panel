@@ -29,7 +29,7 @@ export function PublicLeadCaptureForm() {
   return (
     <form onSubmit={handleSubmit} className="rounded-3xl border border-white/10 bg-black/20 p-6">
       <h3 className="text-lg font-semibold">Request a demo / join waitlist</h3>
-      <p className="mt-2 text-sm text-zinc-400">See if DavyG CRM fits your business.</p>
+      <p className="mt-2 text-sm text-zinc-400">Tell us about your workflow and we’ll show you how AdminPaneling can fit it.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />
         <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Business / service type" className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none" />

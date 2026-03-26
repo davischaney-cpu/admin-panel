@@ -22,8 +22,6 @@ export function CreateJobFromLeadButton({
   const [pending, startTransition] = useTransition();
 
   async function handleCreate() {
-    const scheduledFor = new Date(Date.now() + 1000 * 60 * 60 * 24 * 2).toISOString();
-
     const response = await fetch("/api/jobs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,16 +29,17 @@ export function CreateJobFromLeadButton({
         leadId,
         title: `${fullName} ${serviceType}`,
         serviceType,
-        scheduledFor,
         quotedCents: estimatedCents ?? null,
         address: location ?? null,
+        status: "QUOTED",
+        quoteStatus: "SENT",
       }),
     });
 
-    const data = await response.json() as { error?: string };
+    const data = (await response.json()) as { error?: string };
 
     startTransition(() => {
-      showToast(response.ok ? "Job created." : data.error ?? "Could not create job.");
+      showToast(response.ok ? "Quote/job created." : data.error ?? "Could not create job.");
       router.refresh();
     });
   }
@@ -51,7 +50,7 @@ export function CreateJobFromLeadButton({
       disabled={pending}
       className="rounded-xl border border-white/10 px-3 py-2 text-xs text-zinc-200 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {pending ? "Creating..." : "Create job"}
+      {pending ? "Creating..." : "Create quote/job"}
     </button>
   );
 }

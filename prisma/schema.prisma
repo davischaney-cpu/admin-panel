@@ -47,23 +47,31 @@ model Lead {
 }
 
 model Job {
-  id              String    @id @default(cuid())
+  id              String        @id @default(cuid())
   leadId          String?
   title           String
   serviceType     String
-  status          JobStatus @default(SCHEDULED)
+  status          JobStatus     @default(SCHEDULED)
   scheduledFor    DateTime?
   address         String?
   quotedCents     Int?
   finalCents      Int?
+  quoteStatus     QuoteStatus   @default(DRAFT)
+  quotedAt        DateTime?
+  quoteApprovedAt DateTime?
+  invoiceStatus   InvoiceStatus @default(NOT_SENT)
+  invoiceSentAt   DateTime?
+  invoicePaidAt   DateTime?
   notes           String?
   completedAt     DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  lead            Lead?     @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lead            Lead?         @relation(fields: [leadId], references: [id], onDelete: SetNull)
 
   @@index([status])
   @@index([scheduledFor])
+  @@index([quoteStatus])
+  @@index([invoiceStatus])
 }
 
 enum Role {
@@ -106,6 +114,20 @@ enum JobStatus {
   IN_PROGRESS
   COMPLETED
   CANCELLED
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  APPROVED
+  DECLINED
+}
+
+enum InvoiceStatus {
+  NOT_SENT
+  SENT
+  PAID
+  OVERDUE
 }
 
 enum BillingPlan {

@@ -58,6 +58,8 @@ export default async function DashboardPage() {
   const hasLeads = leads.length > 0;
   const hasJobs = jobs.length > 0;
   const hasFollowUps = leads.some((lead) => Boolean(lead.nextFollowUpAt));
+  const closingSoon = leads.filter((lead) => lead.status === "QUOTED" || lead.status === "BOOKED").length;
+  const openJobValue = upcomingJobs.reduce((sum, job) => sum + (job.finalCents ?? job.quotedCents ?? 0), 0);
 
   return (
     <DashboardShell email={email} role={role} currentPath="/dashboard">
@@ -78,6 +80,49 @@ export default async function DashboardPage() {
         <StatCard label="Follow-ups overdue" value={String(overdueFollowUps)} hint="needs action" />
         <StatCard label="Jobs this week" value={String(jobsThisWeek)} hint="scheduled" />
         <StatCard label="Pipeline value" value={formatCurrency(pipelineValue)} hint="quoted" />
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+        <SectionCard>
+          <SectionTitle title="Business pulse" description="A fast read on pipeline health, scheduled revenue, and what needs attention next." />
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-4">
+              <p className="text-sm text-emerald-100/80">Closing soon</p>
+              <p className="mt-2 text-3xl font-semibold text-white">{closingSoon}</p>
+              <p className="mt-2 text-xs uppercase tracking-wide text-emerald-200/70">quoted or booked</p>
+            </div>
+            <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-4">
+              <p className="text-sm text-cyan-100/80">Open job value</p>
+              <p className="mt-2 text-3xl font-semibold text-white">{formatCurrency(openJobValue)}</p>
+              <p className="mt-2 text-xs uppercase tracking-wide text-cyan-200/70">upcoming work</p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <p className="text-sm text-zinc-300">System posture</p>
+              <p className="mt-2 text-lg font-semibold text-white">{hasLeads ? "Active pipeline" : "Needs first lead"}</p>
+              <p className="mt-2 text-sm text-zinc-400">{hasFollowUps ? "Follow-ups are being tracked." : "No follow-up schedule yet."}</p>
+            </div>
+          </div>
+        </SectionCard>
+
+        <SectionCard>
+          <SectionTitle title="Quick actions" description="The moves that keep the day from slipping." />
+          <div className="mt-6 grid gap-3">
+            <Link href="/leads" className="rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+              <p className="font-medium text-white">Review leads pipeline</p>
+              <p className="mt-1 text-sm text-zinc-400">Triage new leads, update statuses, and schedule follow-ups.</p>
+            </Link>
+            <Link href="/jobs" className="rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+              <p className="font-medium text-white">Check upcoming jobs</p>
+              <p className="mt-1 text-sm text-zinc-400">Make sure scheduled work is staffed, priced, and ready.</p>
+            </Link>
+            {hasPermission("manageUsers") ? (
+              <Link href="/users" className="rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+                <p className="font-medium text-white">Audit team access</p>
+                <p className="mt-1 text-sm text-zinc-400">Keep roles clean across owner, admin, sales, ops, and viewers.</p>
+              </Link>
+            ) : null}
+          </div>
+        </SectionCard>
       </div>
 
       {!hasLeads ? (

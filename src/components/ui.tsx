@@ -24,7 +24,13 @@ export function PageHeader({
 }
 
 export function SectionCard({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02)] ${className}`}>{children}</section>;
+  return (
+    <section
+      className={`rounded-3xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-6 shadow-[0_20px_80px_-40px_rgba(34,211,238,0.25)] backdrop-blur-sm ${className}`}
+    >
+      {children}
+    </section>
+  );
 }
 
 export function SectionTitle({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
@@ -41,7 +47,7 @@ export function SectionTitle({ title, description, action }: { title: string; de
 
 export function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+    <div className="rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_35%),rgba(0,0,0,0.22)] p-5 shadow-[0_16px_40px_-28px_rgba(34,211,238,0.45)]">
       <p className="text-sm text-zinc-400">{label}</p>
       <p className="mt-4 text-3xl font-semibold text-white">{value}</p>
       {hint ? <p className="mt-2 text-xs uppercase tracking-wide text-zinc-500">{hint}</p> : null}
@@ -59,9 +65,9 @@ export function EmptyState({ title, description }: { title: string; description:
 }
 
 export function PrimaryButton({ href, children }: { href: string; children: ReactNode }) {
-  return <a href={href} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black transition hover:bg-zinc-200">{children}</a>;
+  return <a href={href} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-black shadow-[0_12px_36px_-20px_rgba(255,255,255,0.9)] transition hover:bg-zinc-200">{children}</a>;
 }
 
 export function SecondaryButton({ href, children }: { href: string; children: ReactNode }) {
-  return <a href={href} className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">{children}</a>;
+  return <a href={href} className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">{children}</a>;
 }

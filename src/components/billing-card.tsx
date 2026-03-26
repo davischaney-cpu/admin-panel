@@ -37,14 +37,14 @@ export function BillingCard() {
   }
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm text-zinc-400">Billing</p>
-          <h3 className="mt-1 text-xl font-semibold">Stripe checkout</h3>
-          <p className="mt-2 text-sm text-zinc-500">Upgrade to a paid plan or open the billing portal if Stripe is already connected.</p>
+          <p className="text-sm text-slate-600">Billing</p>
+          <h3 className="mt-1 text-xl font-semibold text-slate-900">Stripe checkout</h3>
+          <p className="mt-2 text-sm text-slate-700">Upgrade to a paid plan or open the billing portal if Stripe is already connected.</p>
         </div>
-        <button onClick={openPortal} disabled={pending} className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 hover:bg-white/10 disabled:opacity-60">
+        <button onClick={openPortal} disabled={pending} className="rounded-xl border-2 border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-[#163f87] hover:bg-blue-50 disabled:opacity-60">
           Billing portal
         </button>
       </div>
@@ -54,9 +54,9 @@ export function BillingCard() {
           ["PRO", "Pro", "$79/mo"],
           ["TEAM", "Team", "$149/mo"],
         ].map(([value, label, price]) => (
-          <button key={value} onClick={() => startCheckout(value)} disabled={pending} className="rounded-2xl border border-white/10 bg-black/20 px-4 py-4 text-left hover:bg-white/10 disabled:opacity-60">
-            <p className="font-medium">{label}</p>
-            <p className="mt-1 text-sm text-zinc-500">{price}</p>
+          <button key={value} onClick={() => startCheckout(value)} disabled={pending} className="rounded-2xl border border-blue-200 bg-[#f7fbff] px-4 py-4 text-left hover:bg-[#eef5ff] disabled:opacity-60">
+            <p className="font-semibold text-slate-900">{label}</p>
+            <p className="mt-1 text-sm text-slate-700">{price}</p>
           </button>
         ))}
       </div>

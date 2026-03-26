@@ -29,7 +29,7 @@ export function UserRoleSelect({ userId, value }: { userId: string; value: strin
       value={value}
       disabled={pending}
       onChange={(e) => updateRole(e.target.value)}
-      className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-white outline-none"
+      className="rounded-xl border-2 border-blue-200 bg-white px-3 py-2 text-xs font-medium text-slate-900 outline-none"
     >
       {APP_ROLES.filter((role) => role !== "OWNER").map((role) => (
         <option key={role} value={role}>{role}</option>

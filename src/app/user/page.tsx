@@ -3,8 +3,8 @@ import { clerkAppearance } from "@/lib/clerk-appearance";
 
 export default function UserPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#0a0a0f] px-4 py-10 text-zinc-50">
-      <div className="w-full max-w-5xl rounded-3xl border border-white/10 bg-white/5 p-3 shadow-2xl shadow-cyan-950/20 backdrop-blur">
+    <main className="flex min-h-screen items-center justify-center bg-[#edf3f8] px-4 py-10 text-slate-900">
+      <div className="w-full max-w-5xl rounded-[30px] border border-blue-200 bg-white p-3 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
         <UserProfile path="/user" routing="path" appearance={clerkAppearance} />
       </div>
     </main>

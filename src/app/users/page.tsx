@@ -13,15 +13,15 @@ import { syncClerkUser } from "@/lib/sync-user";
 function roleClasses(role: string) {
   switch (role) {
     case "OWNER":
-      return "bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/20";
+      return "bg-amber-100 text-amber-800";
     case "ADMIN":
-      return "bg-cyan-400/15 text-cyan-200 ring-1 ring-cyan-400/20";
+      return "bg-sky-100 text-sky-800";
     case "SALES":
-      return "bg-violet-400/15 text-violet-200 ring-1 ring-violet-400/20";
+      return "bg-violet-100 text-violet-800";
     case "OPS":
-      return "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/20";
+      return "bg-emerald-100 text-emerald-800";
     default:
-      return "bg-zinc-400/15 text-zinc-200 ring-1 ring-zinc-400/20";
+      return "bg-slate-100 text-slate-800";
   }
 }
 
@@ -41,7 +41,6 @@ export default async function UsersPage() {
   }
 
   const clerk = await clerkClient();
-
   const clerkUsers = await clerk.users.getUserList({ limit: 100 });
 
   await Promise.all(
@@ -95,9 +94,9 @@ export default async function UsersPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Total users" value={String(users.length)} />
-        <StatCard label="Owners + admins" value={String(ownerCount + adminCount)} />
-        <StatCard label="Sales + ops" value={String(salesCount + opsCount)} />
-        <StatCard label="Newest signup" value={users[0] ? formatDate(users[0].createdAt) : "No users yet"} />
+        <StatCard label="Owners + admins" value={String(ownerCount + adminCount)} tone="purple" />
+        <StatCard label="Sales + ops" value={String(salesCount + opsCount)} tone="cyan" />
+        <StatCard label="Newest signup" value={users[0] ? formatDate(users[0].createdAt) : "No users yet"} tone="green" />
       </div>
 
       <div className="mt-8 grid gap-6 2xl:grid-cols-[1.15fr_0.85fr]">
@@ -106,31 +105,31 @@ export default async function UsersPage() {
             <SectionTitle title="Team members" description="Role changes update app access, and owner access stays locked to the configured owner email." />
             <div className="mt-6 space-y-3">
               {users.length ? users.map((user) => (
-                <div key={user.clerkUserId} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div key={user.clerkUserId} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-3">
-                        <p className="font-medium text-white">{user.name}</p>
-                        <span className={`rounded-full px-3 py-1 text-xs ${roleClasses(user.role)}`}>{user.role}</span>
-                        {!user.synced ? <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">Awaiting sync</span> : null}
+                        <p className="font-semibold text-slate-900">{user.name}</p>
+                        <span className={`rounded-full px-3 py-1 text-xs font-medium ${roleClasses(user.role)}`}>{user.role}</span>
+                        {!user.synced ? <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">Awaiting sync</span> : null}
                       </div>
-                      <p className="mt-2 text-sm text-zinc-300">{user.email}</p>
-                      <div className="mt-3 flex flex-wrap gap-4 text-xs text-zinc-500">
+                      <p className="mt-2 text-sm text-slate-700">{user.email}</p>
+                      <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-600">
                         <span>Joined {formatDate(user.createdAt)}</span>
                         <span className="font-mono">{user.clerkUserId}</span>
                       </div>
                     </div>
 
                     <div className="flex flex-col gap-2 lg:min-w-44">
-                      <p className="text-xs uppercase tracking-wide text-zinc-500">Role</p>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Role</p>
                       {user.lockedOwner ? (
-                        <div className="rounded-xl border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-xs text-amber-200">
+                        <div className="rounded-xl bg-[#fff6df] px-3 py-2 text-xs font-medium text-amber-900">
                           Owner locked
                         </div>
                       ) : hasPermission("manageRoles") && user.synced ? (
                         <UserRoleSelect userId={user.id} value={user.role} />
                       ) : (
-                        <div className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-zinc-500">
+                        <div className="rounded-xl border border-blue-200 bg-white px-3 py-2 text-xs text-slate-600">
                           {user.synced ? "No access" : "Sign in once to sync"}
                         </div>
                       )}
@@ -147,14 +146,14 @@ export default async function UsersPage() {
             <SectionTitle title="Role guide" description="A quick explanation of what each role can do." />
             <div className="mt-5 space-y-4">
               {(["OWNER", "ADMIN", "SALES", "OPS", "VIEWER"] as const).map((roleName) => (
-                <div key={roleName} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div key={roleName} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
                   <div className="flex items-center gap-3">
-                    <span className={`rounded-full px-3 py-1 text-xs ${roleClasses(roleName)}`}>{roleName}</span>
+                    <span className={`rounded-full px-3 py-1 text-xs font-medium ${roleClasses(roleName)}`}>{roleName}</span>
                   </div>
-                  <p className="mt-3 text-sm text-zinc-400">{roleDescriptions[roleName]}</p>
+                  <p className="mt-3 text-sm text-slate-700">{roleDescriptions[roleName]}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {getRolePermissions(roleName).map((permission) => (
-                      <span key={permission} className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-zinc-300">{permission}</span>
+                      <span key={permission} className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700">{permission}</span>
                     ))}
                   </div>
                 </div>

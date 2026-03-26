@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActivityTimeline } from "@/components/activity-timeline";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { InvoiceBuilder } from "@/components/invoice-builder";
 import { JobEditForm } from "@/components/job-edit-form";
 import { QuoteActions } from "@/components/quote-actions";
 import { QuoteBuilder } from "@/components/quote-builder";
@@ -118,6 +119,15 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
             initialItems={job.quoteItems}
             initialTaxCents={job.quoteTaxCents}
             initialDiscountCents={job.quoteDiscountCents}
+          />
+
+          <InvoiceBuilder
+            jobId={job.id}
+            quoteTotalCents={job.quoteTotalCents}
+            finalCents={job.finalCents}
+            invoiceStatus={job.invoiceStatus}
+            invoiceDueAt={job.invoiceDueAt?.toISOString() ?? null}
+            invoiceMemo={job.invoiceMemo}
           />
 
           <ActivityTimeline title="Job activity" items={job.activityEvents} />

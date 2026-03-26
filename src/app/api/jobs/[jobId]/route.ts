@@ -27,6 +27,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
     quoteTaxCents?: number | null;
     quoteDiscountCents?: number | null;
     quoteItems?: Array<{ id?: string; label: string; description?: string | null; quantity: number; unitCents: number; position: number }>;
+    invoiceDueAt?: string | null;
+    invoiceMemo?: string | null;
     address?: string | null;
     notes?: string | null;
   };
@@ -64,6 +66,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
           })),
         },
       } : {}),
+      ...(body.invoiceDueAt !== undefined ? { invoiceDueAt: body.invoiceDueAt ? new Date(body.invoiceDueAt) : null } : {}),
+      ...(body.invoiceMemo !== undefined ? { invoiceMemo: body.invoiceMemo } : {}),
       ...(body.address !== undefined ? { address: body.address } : {}),
       ...(body.notes !== undefined ? { notes: body.notes } : {}),
       ...(status === "COMPLETED" ? { completedAt: new Date() } : {}),
@@ -80,6 +84,8 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
   if (invoiceStatus) await createJobActivity(job.id, "job.invoice_status_changed", `Invoice status changed to ${invoiceStatus}`, { invoiceStatus });
   if (body.scheduledFor !== undefined) await createJobActivity(job.id, "job.schedule_updated", body.scheduledFor ? "Job schedule updated" : "Job schedule cleared", { scheduledFor: body.scheduledFor });
   if (body.notes !== undefined) await createJobActivity(job.id, "job.notes_updated", "Job notes updated");
+  if (body.invoiceDueAt !== undefined) await createJobActivity(job.id, "job.invoice_due_updated", body.invoiceDueAt ? "Invoice due date updated" : "Invoice due date cleared", { invoiceDueAt: body.invoiceDueAt });
+  if (body.invoiceMemo !== undefined) await createJobActivity(job.id, "job.invoice_memo_updated", "Invoice memo updated");
   if (body.quoteItems) await createJobActivity(job.id, "job.quote_updated", "Quote line items updated", { itemCount: body.quoteItems.length, totalCents: quoteTotals?.totalCents ?? null });
 
   return NextResponse.json({ ok: true, job });

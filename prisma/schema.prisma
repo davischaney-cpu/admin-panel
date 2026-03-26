@@ -67,6 +67,8 @@ model Job {
   invoiceStatus   InvoiceStatus   @default(NOT_SENT)
   invoiceSentAt   DateTime?
   invoicePaidAt   DateTime?
+  invoiceDueAt    DateTime?
+  invoiceMemo     String?
   notes           String?
   completedAt     DateTime?
   createdAt       DateTime        @default(now())

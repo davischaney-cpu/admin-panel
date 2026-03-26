@@ -48,13 +48,15 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
                     </Link>
                   );
                 })}
-                <div className="ml-1 flex items-center gap-3 rounded-2xl bg-white px-3 py-2">
+                <Link href="/user" className="ml-1 flex items-center gap-3 rounded-2xl bg-white px-3 py-2 transition hover:bg-blue-50">
                   <div className="hidden text-right sm:block">
                     <p className="text-sm font-medium text-slate-900">{role ? `${role[0].toUpperCase()}${role.slice(1)}` : "Account"}</p>
-                    <p className="text-xs text-slate-500">Profile</p>
+                    <p className="text-xs text-slate-500">Profile & settings</p>
                   </div>
-                  <UserButton appearance={clerkAppearance} userProfileMode="navigation" userProfileUrl="/user" />
-                </div>
+                  <div onClick={(event) => event.preventDefault()}>
+                    <UserButton appearance={clerkAppearance} userProfileMode="navigation" userProfileUrl="/user" />
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

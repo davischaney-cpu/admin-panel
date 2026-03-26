@@ -31,7 +31,7 @@ export function LeadStatusActions({ leadId, currentStatus }: { leadId: string; c
       value={status}
       disabled={pending}
       onChange={(e) => updateStatus(e.target.value)}
-      className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-white outline-none"
+      className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 outline-none"
     >
       {statuses.map((value) => (
         <option key={value} value={value}>{value}</option>

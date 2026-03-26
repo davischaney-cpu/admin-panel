@@ -40,7 +40,7 @@ export function LeadFollowUpActions({ leadId, currentValue }: { leadId: string; 
         disabled={pending}
         onChange={(e) => setValue(e.target.value)}
         onBlur={(e) => save(e.target.value)}
-        className="rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-xs text-white outline-none"
+        className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs text-slate-900 outline-none"
       />
       <button
         type="button"
@@ -49,7 +49,7 @@ export function LeadFollowUpActions({ leadId, currentValue }: { leadId: string; 
           setValue("");
           void save("");
         }}
-        className="text-left text-[11px] text-zinc-500 hover:text-zinc-300 disabled:opacity-50"
+        className="text-left text-[11px] text-slate-500 hover:text-slate-700 disabled:opacity-50"
       >
         Clear follow-up
       </button>

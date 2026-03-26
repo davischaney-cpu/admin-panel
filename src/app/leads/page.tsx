@@ -25,28 +25,28 @@ function formatCurrency(cents?: number | null) {
 function statusClasses(status: string) {
   switch (status) {
     case "NEW":
-      return "bg-cyan-400/15 text-cyan-200 ring-1 ring-cyan-400/20";
+      return "bg-sky-100 text-sky-700";
     case "CONTACTED":
-      return "bg-violet-400/15 text-violet-200 ring-1 ring-violet-400/20";
+      return "bg-violet-100 text-violet-700";
     case "QUOTED":
-      return "bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/20";
+      return "bg-amber-100 text-amber-700";
     case "BOOKED":
-      return "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/20";
+      return "bg-emerald-100 text-emerald-700";
     case "LOST":
-      return "bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/20";
+      return "bg-rose-100 text-rose-700";
     default:
-      return "bg-white/10 text-zinc-300 ring-1 ring-white/10";
+      return "bg-slate-100 text-slate-700";
   }
 }
 
 function urgencyClasses(urgency: string) {
   switch (urgency) {
     case "HIGH":
-      return "bg-rose-500/15 text-rose-300 ring-1 ring-rose-500/20";
+      return "bg-rose-100 text-rose-700";
     case "LOW":
-      return "bg-emerald-400/15 text-emerald-200 ring-1 ring-emerald-400/20";
+      return "bg-emerald-100 text-emerald-700";
     default:
-      return "bg-amber-400/15 text-amber-200 ring-1 ring-amber-400/20";
+      return "bg-amber-100 text-amber-700";
   }
 }
 
@@ -125,35 +125,35 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
 
   return (
     <DashboardShell email={email} role={role} currentPath="/leads">
-      <header className="flex flex-col gap-4 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+      <header className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm text-zinc-400">Lead management</p>
-          <h2 className="mt-1 text-3xl font-semibold tracking-tight">Leads</h2>
-          <p className="mt-2 max-w-2xl text-sm text-zinc-500">A clearer workspace for triaging new inquiries, following up on time, and moving people from quote to booked work.</p>
+          <p className="text-sm text-slate-500">Lead management</p>
+          <h2 className="mt-1 text-3xl font-semibold tracking-tight text-slate-900">Leads</h2>
+          <p className="mt-2 max-w-2xl text-sm text-slate-500">A clearer workspace for triaging new inquiries, following up on time, and moving people from quote to booked work.</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href={showPipeline ? "/leads" : "/leads?pipeline=1"} className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">
+          <Link href={showPipeline ? "/leads" : "/leads?pipeline=1"} className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50">
             {showPipeline ? "Hide pipeline" : "Show pipeline"}
           </Link>
         </div>
       </header>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-          <p className="text-sm text-zinc-400">Total leads</p>
-          <p className="mt-3 text-3xl font-semibold">{leads.length}</p>
+        <div className="rounded-[28px] bg-white p-5 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+          <p className="text-sm text-slate-500">Total leads</p>
+          <p className="mt-3 text-3xl font-semibold text-slate-900">{leads.length}</p>
         </div>
-        <div className="rounded-2xl border border-rose-400/15 bg-rose-400/10 p-5">
-          <p className="text-sm text-rose-100/80">Needs attention</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{overdueLeads.length}</p>
+        <div className="rounded-[28px] bg-rose-600 p-5 text-white shadow-[0_16px_36px_rgba(225,29,72,0.20)]">
+          <p className="text-sm text-white/80">Needs attention</p>
+          <p className="mt-3 text-3xl font-semibold">{overdueLeads.length}</p>
         </div>
-        <div className="rounded-2xl border border-cyan-400/15 bg-cyan-400/10 p-5">
-          <p className="text-sm text-cyan-100/80">Due today</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{todayLeads.length}</p>
+        <div className="rounded-[28px] bg-sky-600 p-5 text-white shadow-[0_16px_36px_rgba(2,132,199,0.20)]">
+          <p className="text-sm text-white/80">Due today</p>
+          <p className="mt-3 text-3xl font-semibold">{todayLeads.length}</p>
         </div>
-        <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/10 p-5">
-          <p className="text-sm text-emerald-100/80">Ready to close</p>
-          <p className="mt-3 text-3xl font-semibold text-white">{readyToClose.length}</p>
+        <div className="rounded-[28px] bg-emerald-600 p-5 text-white shadow-[0_16px_36px_rgba(5,150,105,0.20)]">
+          <p className="text-sm text-white/80">Ready to close</p>
+          <p className="mt-3 text-3xl font-semibold">{readyToClose.length}</p>
         </div>
       </div>
 
@@ -162,16 +162,16 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
           {hasPermission("createLeads") ? (
             <CreateLeadPanel />
           ) : (
-            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <p className="text-sm text-zinc-400">Lead creation</p>
-              <h3 className="mt-1 text-xl font-semibold">Read-only access</h3>
-              <p className="mt-2 text-sm text-zinc-500">Your role can view leads, but cannot create new ones.</p>
+            <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+              <p className="text-sm text-slate-500">Lead creation</p>
+              <h3 className="mt-1 text-xl font-semibold text-slate-900">Read-only access</h3>
+              <p className="mt-2 text-sm text-slate-500">Your role can view leads, but cannot create new ones.</p>
             </div>
           )}
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <h3 className="text-lg font-semibold">Saved views</h3>
-            <p className="mt-1 text-sm text-zinc-400">Jump straight to the kind of work you need to handle.</p>
+          <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
+            <h3 className="text-lg font-semibold text-slate-900">Saved views</h3>
+            <p className="mt-1 text-sm text-slate-500">Jump straight to the kind of work you need to handle.</p>
             <div className="mt-5 space-y-3">
               {savedViews.map((view) => {
                 const active = queueFilter === view.queue;
@@ -179,43 +179,43 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                   <Link
                     key={view.queue}
                     href={view.queue === "ALL" ? "/leads" : `/leads?queue=${view.queue}`}
-                    className={`flex items-center justify-between rounded-2xl border px-4 py-3 transition ${active ? "border-cyan-300 bg-cyan-400/10" : "border-white/10 bg-black/20 hover:bg-white/10"}`}
+                    className={`flex items-center justify-between rounded-2xl border px-4 py-3 transition ${active ? "border-blue-700 bg-blue-700 text-white" : "border-slate-200 bg-slate-50 hover:bg-slate-100"}`}
                   >
-                    <span className="text-sm text-white">{view.label}</span>
-                    <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-zinc-300">{view.count}</span>
+                    <span className={`text-sm ${active ? "text-white" : "text-slate-800"}`}>{view.label}</span>
+                    <span className={`rounded-full px-2.5 py-1 text-xs ${active ? "bg-white/15 text-white" : "bg-white text-slate-600"}`}>{view.count}</span>
                   </Link>
                 );
               })}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h3 className="text-lg font-semibold">Needs attention</h3>
-                <p className="text-sm text-zinc-400">Overdue and due-today follow-ups, surfaced first.</p>
+                <h3 className="text-lg font-semibold text-slate-900">Needs attention</h3>
+                <p className="text-sm text-slate-500">Overdue and due-today follow-ups, surfaced first.</p>
               </div>
-              <Link href="/leads?queue=OVERDUE" className="text-sm text-cyan-300 hover:text-cyan-200">Open view</Link>
+              <Link href="/leads?queue=OVERDUE" className="text-sm text-blue-700 hover:text-blue-800">Open view</Link>
             </div>
 
             <div className="mt-5 space-y-3">
               {attentionLeads.length ? attentionLeads.map((lead) => (
-                <Link key={lead.id} href={`/leads/${lead.id}`} className="block rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+                <Link key={lead.id} href={`/leads/${lead.id}`} className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-white">{lead.fullName}</p>
-                      <p className="text-sm text-zinc-400">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+                      <p className="font-medium text-slate-900">{lead.fullName}</p>
+                      <p className="text-sm text-slate-500">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
                     </div>
                     <span className={`rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
                   </div>
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className={`rounded-full px-3 py-1 text-xs ${urgencyClasses(lead.urgency)}`}>{lead.urgency}</span>
-                    <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-zinc-300">{formatCurrency(lead.estimatedCents)}</span>
+                    <span className="rounded-full bg-white px-3 py-1 text-xs text-slate-600">{formatCurrency(lead.estimatedCents)}</span>
                   </div>
-                  <p className="mt-3 text-xs text-cyan-300">{lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}</p>
+                  <p className="mt-3 text-xs text-blue-700">{lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}</p>
                 </Link>
               )) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
                   Nothing urgent right now.
                 </div>
               )}
@@ -224,11 +224,11 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <div>
-                <h3 className="text-lg font-semibold">{queueLabel(queueFilter)}</h3>
-                <p className="text-sm text-zinc-400">A simpler list view with the next action visible on every lead.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{queueLabel(queueFilter)}</h3>
+                <p className="text-sm text-slate-500">A simpler list view with the next action visible on every lead.</p>
               </div>
               <form className="flex flex-col gap-3 sm:flex-row">
                 <input
@@ -236,10 +236,10 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                   name="q"
                   defaultValue={query}
                   placeholder="Search by name, service, location, phone, or email"
-                  className="min-w-[280px] rounded-xl border border-white/10 bg-black/20 px-4 py-2 text-sm text-white outline-none"
+                  className="min-w-[280px] rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-900 outline-none"
                 />
                 {queueFilter !== "ALL" ? <input type="hidden" name="queue" value={queueFilter} /> : null}
-                <button type="submit" className="rounded-xl border border-white/10 px-4 py-2 text-sm text-zinc-200 transition hover:bg-white/10">Search</button>
+                <button type="submit" className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-50">Search</button>
               </form>
             </div>
 
@@ -249,19 +249,19 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                 const dueSoon = Boolean(lead.nextFollowUpAt && lead.nextFollowUpAt >= now && lead.nextFollowUpAt <= threeDays);
 
                 return (
-                  <div key={lead.id} className="rounded-3xl border border-white/10 bg-black/20 p-5">
+                  <div key={lead.id} className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
                     <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <Link href={`/leads/${lead.id}`} className="text-lg font-semibold text-white hover:text-cyan-200">{lead.fullName}</Link>
+                          <Link href={`/leads/${lead.id}`} className="text-lg font-semibold text-slate-900 hover:text-blue-700">{lead.fullName}</Link>
                           <span className={`rounded-full px-3 py-1 text-xs ${statusClasses(lead.status)}`}>{lead.status}</span>
                           <span className={`rounded-full px-3 py-1 text-xs ${urgencyClasses(lead.urgency)}`}>{lead.urgency}</span>
-                          {needsAttention ? <span className="rounded-full bg-rose-500/15 px-3 py-1 text-xs text-rose-300">Needs attention</span> : null}
-                          {!needsAttention && dueSoon ? <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs text-cyan-200">Due soon</span> : null}
+                          {needsAttention ? <span className="rounded-full bg-rose-100 px-3 py-1 text-xs text-rose-700">Needs attention</span> : null}
+                          {!needsAttention && dueSoon ? <span className="rounded-full bg-sky-100 px-3 py-1 text-xs text-sky-700">Due soon</span> : null}
                         </div>
 
-                        <p className="mt-2 text-sm text-zinc-300">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
-                        <div className="mt-3 flex flex-wrap gap-4 text-xs text-zinc-500">
+                        <p className="mt-2 text-sm text-slate-700">{lead.serviceType}{lead.location ? ` • ${lead.location}` : ""}</p>
+                        <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-500">
                           <span>{lead.phone || lead.email || "No contact info"}</span>
                           <span>{lead.source}</span>
                           <span>{formatCurrency(lead.estimatedCents)}</span>
@@ -272,13 +272,13 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                       <div className="grid gap-3 sm:grid-cols-2 xl:min-w-[360px]">
                         {hasPermission("editLeads") ? (
                           <div>
-                            <p className="mb-2 text-[11px] uppercase tracking-wide text-zinc-500">Status</p>
+                            <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-500">Status</p>
                             <LeadStatusActions leadId={lead.id} currentStatus={lead.status} />
                           </div>
                         ) : null}
                         {hasPermission("editLeads") ? (
                           <div>
-                            <p className="mb-2 text-[11px] uppercase tracking-wide text-zinc-500">Next follow-up</p>
+                            <p className="mb-2 text-[11px] uppercase tracking-wide text-slate-500">Next follow-up</p>
                             <LeadFollowUpActions leadId={lead.id} currentValue={lead.nextFollowUpAt?.toISOString() ?? null} />
                           </div>
                         ) : null}
@@ -287,28 +287,28 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
                   </div>
                 );
               }) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-black/20 p-4 text-sm text-zinc-500">
+                <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-4 text-sm text-slate-500">
                   No leads match this view yet.
                 </div>
               )}
             </div>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+          <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-semibold">Recently added</h3>
-                <p className="text-sm text-zinc-400">A quick list of the latest inquiries hitting the system.</p>
+                <h3 className="text-lg font-semibold text-slate-900">Recently added</h3>
+                <p className="text-sm text-slate-500">A quick list of the latest inquiries hitting the system.</p>
               </div>
             </div>
             <div className="mt-5 space-y-3">
               {recentLeads.length ? recentLeads.map((lead) => (
-                <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/20 p-4 transition hover:bg-white/10">
+                <Link key={lead.id} href={`/leads/${lead.id}`} className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100">
                   <div>
-                    <p className="font-medium text-white">{lead.fullName}</p>
-                    <p className="mt-1 text-sm text-zinc-400">{lead.serviceType}</p>
+                    <p className="font-medium text-slate-900">{lead.fullName}</p>
+                    <p className="mt-1 text-sm text-slate-500">{lead.serviceType}</p>
                   </div>
-                  <div className="text-right text-xs text-zinc-500">
+                  <div className="text-right text-xs text-slate-500">
                     <p>{formatDateTime(lead.createdAt)}</p>
                     <p className="mt-1">{lead.location || lead.source}</p>
                   </div>

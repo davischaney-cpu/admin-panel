@@ -23,11 +23,11 @@ function formatCurrency(cents?: number | null) {
 
 export function LeadsPipelineBoard({ leads }: { leads: LeadRecord[] }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+    <div className="rounded-[28px] border border-sky-100 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Pipeline board</h3>
-          <p className="text-sm text-zinc-400">A quick read on where every lead stands.</p>
+          <h3 className="text-lg font-semibold text-slate-900">Pipeline board</h3>
+          <p className="text-sm text-slate-500">A quick read on where every lead stands.</p>
         </div>
       </div>
 
@@ -35,25 +35,25 @@ export function LeadsPipelineBoard({ leads }: { leads: LeadRecord[] }) {
         {columns.map((column) => {
           const items = leads.filter((lead) => lead.status === column);
           return (
-            <div key={column} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div key={column} className="rounded-2xl bg-slate-50 p-4">
               <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-zinc-100">{column}</h4>
-                <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-zinc-300">{items.length}</span>
+                <h4 className="text-sm font-semibold text-slate-900">{column}</h4>
+                <span className="rounded-full bg-white px-2 py-0.5 text-xs text-slate-600">{items.length}</span>
               </div>
               <div className="mt-4 space-y-3">
                 {items.length ? items.map((lead) => (
-                  <Link key={lead.id} href={`/leads/${lead.id}`} className="block rounded-2xl border border-white/10 bg-white/5 p-3 transition hover:bg-white/10">
+                  <Link key={lead.id} href={`/leads/${lead.id}`} className="block rounded-2xl border border-slate-200 bg-white p-3 transition hover:bg-slate-50">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-medium">{lead.fullName}</p>
-                        <p className="text-sm text-zinc-400">{lead.serviceType}</p>
+                        <p className="font-medium text-slate-900">{lead.fullName}</p>
+                        <p className="text-sm text-slate-500">{lead.serviceType}</p>
                       </div>
-                      <span className="text-xs text-zinc-500">{formatCurrency(lead.estimatedCents)}</span>
+                      <span className="text-xs text-slate-500">{formatCurrency(lead.estimatedCents)}</span>
                     </div>
-                    <p className="mt-2 text-xs text-zinc-500">{lead.location || lead.source}</p>
-                    <p className="mt-1 text-xs text-cyan-300">{lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}</p>
+                    <p className="mt-2 text-xs text-slate-500">{lead.location || lead.source}</p>
+                    <p className="mt-1 text-xs text-blue-700">{lead.nextFollowUpAt ? `Follow up ${formatDateTime(lead.nextFollowUpAt)}` : "No follow-up scheduled"}</p>
                   </Link>
-                )) : <p className="text-xs text-zinc-500">No leads here.</p>}
+                )) : <p className="text-xs text-slate-500">No leads here.</p>}
               </div>
             </div>
           );

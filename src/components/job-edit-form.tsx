@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/toast-provider";
+import { clearDraft, loadDraft, saveDraft } from "@/lib/draft-storage";
 
 const statusOptions = ["DRAFT", "QUOTED", "SCHEDULED", "IN_PROGRESS", "COMPLETED", "CANCELLED"] as const;
 const quoteStatusOptions = ["DRAFT", "SENT", "APPROVED", "DECLINED"] as const;
@@ -37,7 +38,7 @@ export function JobEditForm({
   const router = useRouter();
   const { showToast } = useToast();
   const [pending, startTransition] = useTransition();
-  const [form, setForm] = useState({
+  const emptyState = {
     title: initial.title,
     serviceType: initial.serviceType,
     status: initial.status,
@@ -48,7 +49,12 @@ export function JobEditForm({
     finalDollars: initial.finalCents != null ? String(initial.finalCents / 100) : "",
     address: initial.address ?? "",
     notes: initial.notes ?? "",
-  });
+  };
+  const [form, setForm] = useState(() => loadDraft(`job-edit-draft:${jobId}`, emptyState));
+
+  useEffect(() => {
+    saveDraft(`job-edit-draft:${jobId}`, form);
+  }, [form, jobId]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,6 +80,7 @@ export function JobEditForm({
 
     startTransition(() => {
       showToast(response.ok ? "Job updated." : data.error ?? "Could not update job.");
+      if (response.ok) clearDraft(`job-edit-draft:${jobId}`);
       router.refresh();
     });
   }
@@ -108,6 +115,7 @@ export function JobEditForm({
         <button type="submit" disabled={pending} className="rounded-xl bg-[#163f87] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#12346f] disabled:opacity-60">
           {pending ? "Saving..." : "Save job"}
         </button>
+        <p className="text-xs text-slate-600">Draft autosaves locally while you edit.</p>
       </div>
     </form>
   );

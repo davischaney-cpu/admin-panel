@@ -1,27 +1,33 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/toast-provider";
+import { clearDraft, loadDraft, saveDraft } from "@/lib/draft-storage";
 
 const sourceOptions = ["WEBSITE", "INSTAGRAM", "FACEBOOK", "GOOGLE", "REFERRAL", "PHONE"] as const;
 const urgencyOptions = ["LOW", "MEDIUM", "HIGH"] as const;
+const EMPTY_FORM = {
+  fullName: "",
+  phone: "",
+  email: "",
+  serviceType: "",
+  source: "WEBSITE",
+  urgency: "MEDIUM",
+  location: "",
+  estimatedDollars: "",
+  notes: "",
+};
 
 export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
   const router = useRouter();
   const { showToast } = useToast();
   const [pending, startTransition] = useTransition();
-  const [form, setForm] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    serviceType: "",
-    source: "WEBSITE",
-    urgency: "MEDIUM",
-    location: "",
-    estimatedDollars: "",
-    notes: "",
-  });
+  const [form, setForm] = useState(() => loadDraft("lead-create-draft", EMPTY_FORM));
+
+  useEffect(() => {
+    saveDraft("lead-create-draft", form);
+  }, [form]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,17 +53,8 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
     startTransition(() => {
       if (response.ok) {
         showToast("Lead created.");
-        setForm({
-          fullName: "",
-          phone: "",
-          email: "",
-          serviceType: "",
-          source: "WEBSITE",
-          urgency: "MEDIUM",
-          location: "",
-          estimatedDollars: "",
-          notes: "",
-        });
+        setForm(EMPTY_FORM);
+        clearDraft("lead-create-draft");
         router.refresh();
       } else {
         showToast(data.error ?? "Could not create lead.");
@@ -109,7 +106,7 @@ export function CreateLeadForm({ compact = false }: { compact?: boolean }) {
         <button type="submit" disabled={pending} className="rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
           {pending ? "Creating..." : "Create lead"}
         </button>
-        <p className="text-xs text-slate-600">A follow-up is automatically scheduled for tomorrow so nothing falls through the cracks.</p>
+        <p className="text-xs text-slate-600">Autosaves locally while you type. A follow-up is automatically scheduled for tomorrow too.</p>
       </div>
     </form>
   );

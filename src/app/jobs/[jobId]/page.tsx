@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActivityTimeline } from "@/components/activity-timeline";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { JobEditForm } from "@/components/job-edit-form";
 import { UnauthorizedState } from "@/components/unauthorized-state";
@@ -24,7 +25,10 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
   }
 
   const { jobId } = await params;
-  const job = await db.job.findUnique({ where: { id: jobId }, include: { lead: true } });
+  const job = await db.job.findUnique({
+    where: { id: jobId },
+    include: { lead: true, activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 } },
+  });
 
   if (!job) {
     notFound();
@@ -90,6 +94,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               <p className="mt-2 text-sm text-slate-800">{job.notes || "No notes yet"}</p>
             </div>
           </div>
+
+          <ActivityTimeline title="Job activity" items={job.activityEvents} />
         </div>
 
         <aside className="space-y-6">

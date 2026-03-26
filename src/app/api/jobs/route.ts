@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createJobActivity, createLeadActivity } from "@/lib/activity";
 import { db } from "@/lib/db";
 import { requirePermission } from "@/lib/require-permission";
 
@@ -38,10 +39,20 @@ export async function POST(request: Request) {
     include: { lead: true },
   });
 
+  await createJobActivity(job.id, "job.created", "Job created", {
+    status: job.status,
+    quoteStatus: job.quoteStatus,
+  });
+
   if (body.leadId) {
+    const leadStatus = body.status === "QUOTED" ? "QUOTED" : "BOOKED";
     await db.lead.update({
       where: { id: body.leadId },
-      data: { status: body.status === "QUOTED" ? "QUOTED" : "BOOKED" },
+      data: { status: leadStatus },
+    });
+    await createLeadActivity(body.leadId, "lead.converted", `Lead converted into ${body.status === "QUOTED" ? "a quote" : "a booked job"}`, {
+      jobId: job.id,
+      status: leadStatus,
     });
   }
 

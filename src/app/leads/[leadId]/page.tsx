@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActivityTimeline } from "@/components/activity-timeline";
 import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-button";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { LeadFollowUpActions } from "@/components/lead-follow-up-actions";
@@ -37,7 +38,10 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   const { leadId } = await params;
   const lead = await db.lead.findUnique({
     where: { id: leadId },
-    include: { jobs: { orderBy: [{ scheduledFor: "asc" }, { createdAt: "desc" }] } },
+    include: {
+      jobs: { orderBy: [{ scheduledFor: "asc" }, { createdAt: "desc" }] },
+      activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 },
+    },
   });
 
   if (!lead) notFound();
@@ -129,6 +133,8 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
               )) : null}
             </div>
           </div>
+
+          <ActivityTimeline title="Lead activity" items={lead.activityEvents} />
         </div>
 
         <aside className="space-y-6">

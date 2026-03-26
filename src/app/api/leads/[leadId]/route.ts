@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createLeadActivity } from "@/lib/activity";
 import { db } from "@/lib/db";
 import { requirePermission } from "@/lib/require-permission";
 
@@ -27,6 +28,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ le
       ...(status === "CONTACTED" ? { lastContactedAt: new Date() } : {}),
     },
   });
+
+  if (status) {
+    await createLeadActivity(lead.id, "lead.status_changed", `Lead status changed to ${status}`, { status });
+  }
+  if (nextFollowUpAt !== undefined) {
+    await createLeadActivity(lead.id, "lead.follow_up_set", nextFollowUpAt ? "Next follow-up scheduled" : "Next follow-up cleared", {
+      nextFollowUpAt: nextFollowUpAt?.toISOString() ?? null,
+    });
+  }
 
   return NextResponse.json({ ok: true, lead });
 }

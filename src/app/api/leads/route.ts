@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createLeadActivity } from "@/lib/activity";
 import { db } from "@/lib/db";
 import { requirePermission } from "@/lib/require-permission";
 
@@ -37,6 +38,11 @@ export async function POST(request: Request) {
       notes: body.notes || null,
       nextFollowUpAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
     },
+  });
+
+  await createLeadActivity(lead.id, "lead.created", "Lead created", {
+    status: lead.status,
+    serviceType: lead.serviceType,
   });
 
   return NextResponse.json({ ok: true, lead });

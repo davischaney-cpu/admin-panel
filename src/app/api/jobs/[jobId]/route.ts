@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createJobActivity } from "@/lib/activity";
 import { db } from "@/lib/db";
 import { requirePermission } from "@/lib/require-permission";
 
@@ -51,6 +52,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ jo
     },
     include: { lead: true },
   });
+
+  if (status) await createJobActivity(job.id, "job.status_changed", `Job status changed to ${status}`, { status });
+  if (quoteStatus) await createJobActivity(job.id, "job.quote_status_changed", `Quote status changed to ${quoteStatus}`, { quoteStatus });
+  if (invoiceStatus) await createJobActivity(job.id, "job.invoice_status_changed", `Invoice status changed to ${invoiceStatus}`, { invoiceStatus });
+  if (body.scheduledFor !== undefined) await createJobActivity(job.id, "job.schedule_updated", body.scheduledFor ? "Job schedule updated" : "Job schedule cleared", { scheduledFor: body.scheduledFor });
+  if (body.notes !== undefined) await createJobActivity(job.id, "job.notes_updated", "Job notes updated");
 
   return NextResponse.json({ ok: true, job });
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ActivityTimeline } from "@/components/activity-timeline";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { JobEditForm } from "@/components/job-edit-form";
+import { QuoteBuilder } from "@/components/quote-builder";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -27,7 +28,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
   const { jobId } = await params;
   const job = await db.job.findUnique({
     where: { id: jobId },
-    include: { lead: true, activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 } },
+    include: {
+      lead: true,
+      quoteItems: { orderBy: { position: "asc" } },
+      activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 },
+    },
   });
 
   if (!job) {
@@ -66,8 +71,8 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
                 <p className="mt-2 font-semibold text-slate-900">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
               </div>
               <div className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
-                <p className="text-sm text-slate-600">Value</p>
-                <p className="mt-2 font-semibold text-slate-900">{formatCurrency(job.finalCents ?? job.quotedCents)}</p>
+                <p className="text-sm text-slate-600">Quote total</p>
+                <p className="mt-2 font-semibold text-slate-900">{formatCurrency(job.quoteTotalCents ?? job.quotedCents)}</p>
               </div>
             </div>
 
@@ -94,6 +99,13 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
               <p className="mt-2 text-sm text-slate-800">{job.notes || "No notes yet"}</p>
             </div>
           </div>
+
+          <QuoteBuilder
+            jobId={job.id}
+            initialItems={job.quoteItems}
+            initialTaxCents={job.quoteTaxCents}
+            initialDiscountCents={job.quoteDiscountCents}
+          />
 
           <ActivityTimeline title="Job activity" items={job.activityEvents} />
         </div>

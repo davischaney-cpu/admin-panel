@@ -57,6 +57,10 @@ model Job {
   address         String?
   quotedCents     Int?
   finalCents      Int?
+  quoteSubtotalCents Int? 
+  quoteTaxCents   Int?
+  quoteDiscountCents Int?
+  quoteTotalCents Int?
   quoteStatus     QuoteStatus     @default(DRAFT)
   quotedAt        DateTime?
   quoteApprovedAt DateTime?
@@ -69,6 +73,7 @@ model Job {
   updatedAt       DateTime        @updatedAt
   lead            Lead?           @relation(fields: [leadId], references: [id], onDelete: SetNull)
   activityEvents  ActivityEvent[]
+  quoteItems      QuoteItem[]
 
   @@index([status])
   @@index([scheduledFor])
@@ -90,6 +95,21 @@ model ActivityEvent {
   @@index([leadId, createdAt])
   @@index([jobId, createdAt])
   @@index([createdAt])
+}
+
+model QuoteItem {
+  id          String   @id @default(cuid())
+  jobId        String
+  label        String
+  description  String?
+  quantity     Int      @default(1)
+  unitCents    Int
+  position     Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, position])
 }
 
 enum Role {

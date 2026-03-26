@@ -33,12 +33,12 @@ export function DashboardShell({ children, email, role, currentPath = "/" }: Das
             type="button"
             aria-label="Close sidebar overlay"
             onClick={() => setSidebarOpen(false)}
-            className="fixed inset-0 z-30 bg-slate-900/20"
+            className="fixed inset-0 z-30 bg-slate-900/35"
           />
         ) : null}
 
         <aside
-          className={`fixed inset-y-0 left-0 z-40 w-[300px] border-r border-sky-100 bg-white/95 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.10)] backdrop-blur-xl transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+          className={`fixed inset-y-0 left-0 z-40 w-[300px] border-r border-slate-200 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.10)] transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
           <div className="flex items-start justify-between gap-4">
             <div>

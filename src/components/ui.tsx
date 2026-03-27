@@ -16,7 +16,6 @@ export function PageHeader({
       <div className="max-w-2xl">
         <p className="text-xs font-medium uppercase tracking-[0.24em] text-sky-700/70">{eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">{title}</h1>
-        {description ? <p className="mt-3 text-sm leading-7 text-slate-600 sm:text-base">{description}</p> : null}
       </div>
       {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
     </header>
@@ -36,7 +35,6 @@ export function SectionTitle({ title, description, action }: { title: string; de
     <div className="flex items-start justify-between gap-4">
       <div>
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-        {description ? <p className="mt-1 text-sm text-slate-500">{description}</p> : null}
       </div>
       {action}
     </div>
@@ -62,11 +60,11 @@ export function StatCard({ label, value, hint, tone = "blue" }: { label: string;
   );
 }
 
-export function EmptyState({ title, description }: { title: string; description: string }) {
+export function EmptyState({ title, description }: { title: string; description?: string }) {
   return (
     <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-5">
       <p className="font-medium text-slate-900">{title}</p>
-      <p className="mt-2 text-sm text-slate-500">{description}</p>
+      {description ? <p className="mt-2 text-sm text-slate-500">{description}</p> : null}
     </div>
   );
 }

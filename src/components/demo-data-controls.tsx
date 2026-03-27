@@ -22,7 +22,6 @@ export function DemoDataControls() {
     <div className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <p className="text-sm text-slate-600">Sales demo</p>
       <h3 className="mt-1 text-xl font-semibold text-slate-900">Demo workspace controls</h3>
-      <p className="mt-2 text-sm text-slate-700">Load a clean sample pipeline for demos or wipe it back to empty.</p>
       <div className="mt-5 flex flex-wrap gap-3">
         <button onClick={() => run("/api/demo/seed", "Demo data loaded.")} disabled={pending} className="rounded-xl bg-[#163f87] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#12346f] disabled:opacity-60">
           Load demo data

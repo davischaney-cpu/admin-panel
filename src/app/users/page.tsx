@@ -25,14 +25,6 @@ function roleClasses(role: string) {
   }
 }
 
-const roleDescriptions: Record<string, string> = {
-  OWNER: "Full control, including billing, roles, and company-wide settings.",
-  ADMIN: "Runs the business day-to-day and manages the team.",
-  SALES: "Owns leads, follow-ups, and converting work into booked jobs.",
-  OPS: "Handles scheduling, jobs, and operational execution.",
-  VIEWER: "Read-only access for oversight without editing power.",
-};
-
 export default async function UsersPage() {
   const { email, role, hasPermission } = await getAdminContext();
 
@@ -88,7 +80,6 @@ export default async function UsersPage() {
       <PageHeader
         eyebrow="Team access"
         title="Users & roles"
-        description="Keep access clean across the company — owners, admins, sales, ops, and view-only users all get different capabilities."
         actions={<SecondaryButton href="/dashboard">Back to dashboard</SecondaryButton>}
       />
 
@@ -102,7 +93,7 @@ export default async function UsersPage() {
       <div className="mt-8 grid gap-6 2xl:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
           <SectionCard>
-            <SectionTitle title="Team members" description="Role changes update app access, and owner access stays locked to the configured owner email." />
+            <SectionTitle title="Team members" />
             <div className="mt-6 space-y-3">
               {users.length ? users.map((user) => (
                 <div key={user.clerkUserId} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
@@ -143,14 +134,13 @@ export default async function UsersPage() {
 
         <div className="space-y-6">
           <SectionCard>
-            <SectionTitle title="Role guide" description="A quick explanation of what each role can do." />
+            <SectionTitle title="Role guide" />
             <div className="mt-5 space-y-4">
               {(["OWNER", "ADMIN", "SALES", "OPS", "VIEWER"] as const).map((roleName) => (
                 <div key={roleName} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
                   <div className="flex items-center gap-3">
                     <span className={`rounded-full px-3 py-1 text-xs font-medium ${roleClasses(roleName)}`}>{roleName}</span>
                   </div>
-                  <p className="mt-3 text-sm text-slate-700">{roleDescriptions[roleName]}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {getRolePermissions(roleName).map((permission) => (
                       <span key={permission} className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700">{permission}</span>

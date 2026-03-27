@@ -54,7 +54,6 @@ export default async function JobsPage() {
       <PageHeader
         eyebrow="Operations"
         title="Jobs"
-        description="Track quoted work, unscheduled jobs, and everything already booked on the calendar."
       />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -79,7 +78,7 @@ export default async function JobsPage() {
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <div className="space-y-6">
           <SectionCard>
-            <SectionTitle title="Quoted & unscheduled" description="This is the conversion zone — work here to turn quotes into booked revenue." />
+            <SectionTitle title="Quoted & unscheduled" />
             <div className="mt-6 space-y-3">
               {[...quotedJobs, ...unscheduledJobs.filter((job) => !quotedJobs.some((item) => item.id === job.id))].length ? [...quotedJobs, ...unscheduledJobs.filter((job) => !quotedJobs.some((item) => item.id === job.id))].map((job) => (
                 <Link key={job.id} href={`/jobs/${job.id}`} className="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100 sm:flex-row sm:items-center sm:justify-between">
@@ -93,12 +92,12 @@ export default async function JobsPage() {
                     <span className="text-sm text-slate-700">{formatCurrency(job.finalCents ?? job.quotedCents)}</span>
                   </div>
                 </Link>
-              )) : <EmptyState title="No quoted or unscheduled jobs" description="As leads convert into jobs, the work that still needs scheduling will surface here." />}
+              )) : <EmptyState title="No quoted or unscheduled jobs" description="" />}
             </div>
           </SectionCard>
 
           <SectionCard>
-            <SectionTitle title="All jobs" description="Every quoted, scheduled, or completed job in one place." />
+            <SectionTitle title="All jobs" />
             <div className="mt-6 overflow-x-auto">
               {jobs.length ? (
                 <table className="min-w-full text-left text-sm">
@@ -129,7 +128,7 @@ export default async function JobsPage() {
                   </tbody>
                 </table>
               ) : (
-                <EmptyState title="No jobs yet" description="Convert a lead into a job from the Leads page and it will show up here." />
+                <EmptyState title="No jobs yet" description="" />
               )}
             </div>
           </SectionCard>
@@ -137,7 +136,7 @@ export default async function JobsPage() {
 
         <div className="space-y-6">
           <SectionCard>
-            <SectionTitle title="Upcoming this week" description="The next jobs already on the board." action={<Link href="/calendar" className="text-sm text-blue-700 hover:text-blue-800">Open calendar</Link>} />
+            <SectionTitle title="Upcoming this week" action={<Link href="/calendar" className="text-sm text-blue-700 hover:text-blue-800">Open calendar</Link>} />
             <div className="mt-6 space-y-3">
               {upcomingJobs.length ? upcomingJobs.map((job) => (
                 <Link key={job.id} href={`/jobs/${job.id}`} className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100">
@@ -145,12 +144,12 @@ export default async function JobsPage() {
                   <p className="mt-1 text-sm text-slate-500">{job.lead?.fullName || "No linked customer"}</p>
                   <p className="mt-2 text-sm text-slate-500">{job.scheduledFor ? formatDateTime(job.scheduledFor) : "Not scheduled"}</p>
                 </Link>
-              )) : <EmptyState title="No upcoming jobs" description="Scheduled work for the next 7 days will appear here." />}
+              )) : <EmptyState title="No upcoming jobs" description="" />}
             </div>
           </SectionCard>
 
           <SectionCard>
-            <SectionTitle title="Completed" description="Recently finished work." />
+            <SectionTitle title="Completed" />
             <div className="mt-6 space-y-3">
               {completedJobs.slice(0, 6).length ? completedJobs.slice(0, 6).map((job) => (
                 <Link key={job.id} href={`/jobs/${job.id}`} className="block rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:bg-slate-100">
@@ -158,7 +157,7 @@ export default async function JobsPage() {
                   <p className="mt-1 text-sm text-slate-500">{job.lead?.fullName || "No linked customer"}</p>
                   <p className="mt-2 text-sm text-slate-500">{job.completedAt ? formatDateTime(job.completedAt) : "Marked completed"}</p>
                 </Link>
-              )) : <EmptyState title="No completed jobs yet" description="Finished jobs will create a nice proof-of-work history here." />}
+              )) : <EmptyState title="No completed jobs yet" description="" />}
             </div>
           </SectionCard>
         </div>

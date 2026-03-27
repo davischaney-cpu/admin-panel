@@ -42,7 +42,6 @@ export function BillingCard() {
         <div>
           <p className="text-sm text-slate-600">Billing</p>
           <h3 className="mt-1 text-xl font-semibold text-slate-900">Stripe checkout</h3>
-          <p className="mt-2 text-sm text-slate-700">Upgrade to a paid plan or open the billing portal if Stripe is already connected.</p>
         </div>
         <button onClick={openPortal} disabled={pending} className="rounded-xl border-2 border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-[#163f87] hover:bg-blue-50 disabled:opacity-60">
           Billing portal

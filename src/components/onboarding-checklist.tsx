@@ -39,7 +39,6 @@ export function OnboardingChecklist({ hasLeads, hasJobs, hasFollowUps }: Onboard
         <div>
           <p className="text-sm text-slate-500">First-run setup</p>
           <h3 className="mt-1 text-xl font-semibold text-slate-900">Get the CRM working for you in 3 moves</h3>
-          <p className="mt-2 text-sm text-slate-500">This gets the pipeline live fast so the dashboard starts feeling useful immediately.</p>
         </div>
         <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600">{completed}/3 complete</span>
       </div>

@@ -29,7 +29,6 @@ export function PublicLeadCaptureForm() {
   return (
     <form onSubmit={handleSubmit} className="rounded-[30px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
       <h3 className="text-lg font-semibold text-slate-900">Request a demo / join waitlist</h3>
-      <p className="mt-2 text-sm text-slate-700">Tell us about your workflow and we’ll show you how AdminPaneling can fit it.</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <input value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder="Full name" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />
         <input value={form.serviceType} onChange={(e) => setForm({ ...form, serviceType: e.target.value })} placeholder="Business / service type" className="rounded-2xl border-2 border-blue-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none" />

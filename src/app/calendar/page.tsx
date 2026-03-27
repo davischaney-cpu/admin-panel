@@ -66,7 +66,6 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
           <div>
             <p className="text-sm text-blue-100/85">Scheduling</p>
             <h2 className="mt-1 text-3xl font-semibold tracking-tight">Jobs calendar</h2>
-            <p className="mt-2 text-sm text-blue-100/85">See booked work by day and keep the week from getting messy.</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl bg-white px-4 py-3 text-slate-900">

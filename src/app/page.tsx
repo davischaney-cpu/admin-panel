@@ -157,10 +157,9 @@ export default function LandingPage() {
               </div>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                {featureCards.map(([title, copy]) => (
+                {featureCards.map(([title]) => (
                   <div key={title} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
                     <h3 className="font-medium text-slate-900">{title}</h3>
-                    <p className="mt-2 text-sm text-slate-700">{copy}</p>
                   </div>
                 ))}
               </div>
@@ -170,10 +169,9 @@ export default function LandingPage() {
               <p className="text-sm text-slate-600">What feels better</p>
               <h2 className="mt-2 text-2xl font-semibold text-slate-900">Built for operators, not enterprise theater.</h2>
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                {comparisonPoints.map(([title, copy]) => (
+                {comparisonPoints.map(([title]) => (
                   <div key={title} className="rounded-2xl bg-white p-4">
                     <h3 className="font-medium text-slate-900">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-700">{copy}</p>
                   </div>
                 ))}
               </div>
@@ -184,13 +182,12 @@ export default function LandingPage() {
             <div id="pricing" className="rounded-[30px] border border-blue-200 bg-white p-8 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
               <p className="text-sm text-slate-600">Pricing</p>
               <div className="mt-5 space-y-4">
-                {pricing.map(([name, price, copy]) => (
+                {pricing.map(([name, price]) => (
                   <div key={name} className="rounded-2xl border border-blue-200 bg-[#f7fbff] p-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-slate-900">{name}</h3>
                       <span className="text-lg font-semibold text-slate-900">{price}</span>
                     </div>
-                    <p className="mt-2 text-sm text-slate-700">{copy}</p>
                   </div>
                 ))}
               </div>

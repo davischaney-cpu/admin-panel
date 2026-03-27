@@ -17,9 +17,6 @@ export default async function SignUpPage() {
           <section className="hidden bg-[#163f87] p-10 text-white lg:block">
             <p className="text-xs uppercase tracking-[0.3em] text-blue-100/80">DavyG</p>
             <h1 className="mt-4 max-w-sm text-4xl font-semibold tracking-tight">Create your DavyG CRM account.</h1>
-            <p className="mt-4 max-w-md text-sm leading-7 text-blue-100/85">
-              Start with an account, then assign the right company role so each person only sees and edits what they should.
-            </p>
 
             <div className="mt-10 space-y-3">
               {[
@@ -39,7 +36,6 @@ export default async function SignUpPage() {
             <div className="mb-4 rounded-[1.5rem] bg-white px-6 py-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
               <p className="text-xs uppercase tracking-[0.3em] text-[#163f87]">Get started</p>
               <h2 className="mt-2 text-2xl font-semibold text-slate-900">Create your DavyG CRM account</h2>
-              <p className="mt-2 text-sm text-slate-700">Set up your workspace and then assign the right company role for each teammate.</p>
             </div>
             <div className="rounded-[1.5rem] border border-blue-200 bg-white p-2 shadow-[0_10px_30px_rgba(15,23,42,0.05)]">
               <SignUp

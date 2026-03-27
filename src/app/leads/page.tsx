@@ -130,7 +130,6 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
           <div>
             <p className="text-sm text-blue-100/85">Lead management</p>
             <h2 className="mt-1 text-3xl font-semibold tracking-tight">Leads</h2>
-            <p className="mt-2 max-w-2xl text-sm text-blue-100/85">A sharper workspace for triaging inquiries, assigning follow-ups, and moving people from quote to booked work.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href={showPipeline ? "/leads" : "/leads?pipeline=1"} className="rounded-2xl bg-white px-4 py-2.5 text-sm font-medium text-[#0f3d91] transition hover:bg-blue-50">
@@ -167,13 +166,11 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
             <div className="rounded-[28px] border border-blue-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)]">
               <p className="text-sm font-medium text-slate-600">Lead creation</p>
               <h3 className="mt-1 text-xl font-semibold text-slate-900">Read-only access</h3>
-              <p className="mt-2 text-sm text-slate-700">Your role can view leads, but cannot create new ones.</p>
             </div>
           )}
 
           <div className="rounded-[28px] border border-blue-200 bg-[#e8f1ff] p-6 shadow-[0_12px_40px_rgba(15,23,42,0.05)]">
             <h3 className="text-lg font-semibold text-slate-900">Saved views</h3>
-            <p className="mt-1 text-sm text-slate-700">Jump straight to the kind of work you need to handle.</p>
             <div className="mt-5 space-y-3">
               {savedViews.map((view) => {
                 const active = queueFilter === view.queue;
@@ -195,7 +192,6 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">Needs attention</h3>
-                <p className="text-sm text-slate-700">Overdue and due-today follow-ups, surfaced first.</p>
               </div>
               <Link href="/leads?queue=OVERDUE" className="text-sm font-medium text-[#163f87] hover:text-[#0f2f69]">Open view</Link>
             </div>
@@ -230,7 +226,6 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
             <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">{queueLabel(queueFilter)}</h3>
-                <p className="text-sm text-slate-700">A cleaner list view with the next action visible on every lead.</p>
               </div>
               <form className="flex flex-col gap-3 sm:flex-row">
                 <input
@@ -300,7 +295,6 @@ export default async function LeadsPage({ searchParams }: LeadsPageProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-semibold text-slate-900">Recently added</h3>
-                <p className="text-sm text-slate-700">A quick list of the latest inquiries hitting the system.</p>
               </div>
             </div>
             <div className="mt-5 space-y-3">

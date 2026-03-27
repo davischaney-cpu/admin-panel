@@ -12,7 +12,6 @@ export function CreateLeadPanel() {
         <div>
           <p className="text-sm text-slate-500">New lead</p>
           <h3 className="mt-1 text-xl font-semibold text-slate-900">Add a fresh inquiry fast</h3>
-          <p className="mt-2 text-sm text-slate-500">Keep the main leads screen cleaner and open the form only when you need it.</p>
         </div>
         <button
           type="button"

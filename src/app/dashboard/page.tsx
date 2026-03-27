@@ -66,7 +66,6 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Overview"
         title="CRM dashboard"
-        description="A cleaner snapshot of sales activity, follow-ups, and booked work without the clutter."
         actions={
           <>
             <PrimaryButton href="/leads">Open leads</PrimaryButton>
@@ -84,7 +83,7 @@ export default async function DashboardPage() {
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         <SectionCard>
-          <SectionTitle title="Performance snapshot" description="A quick executive read on what is closing, what is scheduled, and how healthy the pipeline feels." />
+          <SectionTitle title="Performance snapshot" />
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             <div className="rounded-[24px] bg-slate-50 p-5">
               <p className="text-sm text-slate-500">Closing soon</p>
@@ -105,20 +104,17 @@ export default async function DashboardPage() {
         </SectionCard>
 
         <SectionCard>
-          <SectionTitle title="Quick actions" description="The main moves operators need most." />
+          <SectionTitle title="Quick actions" />
           <div className="mt-6 grid gap-3">
             <Link href="/leads" className="rounded-[22px] bg-slate-50 p-4 transition hover:bg-slate-100">
               <p className="font-medium text-slate-900">Review leads</p>
-              <p className="mt-1 text-sm text-slate-500">Triage new inquiries and keep callbacks on track.</p>
             </Link>
             <Link href="/jobs" className="rounded-[22px] bg-slate-50 p-4 transition hover:bg-slate-100">
               <p className="font-medium text-slate-900">Check jobs</p>
-              <p className="mt-1 text-sm text-slate-500">Make sure booked work is ready to go.</p>
             </Link>
             {hasPermission("manageUsers") ? (
               <Link href="/users" className="rounded-[22px] bg-slate-50 p-4 transition hover:bg-slate-100">
                 <p className="font-medium text-slate-900">Manage team</p>
-                <p className="mt-1 text-sm text-slate-500">Keep roles and access clean.</p>
               </Link>
             ) : null}
           </div>
@@ -133,7 +129,7 @@ export default async function DashboardPage() {
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
         <SectionCard>
-          <SectionTitle title="Leads needing attention" description="Fresh leads, overdue follow-ups, and quotes still waiting." action={<Link href="/leads" className="text-sm text-blue-700 hover:text-blue-800">View all</Link>} />
+          <SectionTitle title="Leads needing attention" action={<Link href="/leads" className="text-sm text-blue-700 hover:text-blue-800">View all</Link>} />
           <div className="mt-6 space-y-3">
             {leads.length ? leads.map((lead) => (
               <div key={lead.id} className="flex flex-col gap-3 rounded-[22px] bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -147,12 +143,12 @@ export default async function DashboardPage() {
                   <span className="text-sm text-slate-700">{formatCurrency(lead.estimatedCents)}</span>
                 </div>
               </div>
-            )) : <EmptyState title="No leads yet" description="Create your first lead in the Leads tab to start building the pipeline." />}
+            )) : <EmptyState title="No leads yet" description="" />}
           </div>
         </SectionCard>
 
         <SectionCard>
-          <SectionTitle title="Today’s follow-ups" description="Who needs a text or call right now." />
+          <SectionTitle title="Today’s follow-ups" />
           <div className="mt-6 space-y-4">
             {followUpsToday.length ? followUpsToday.map((lead) => (
               <div key={lead.id} className="rounded-[22px] bg-slate-50 p-4">
@@ -160,14 +156,14 @@ export default async function DashboardPage() {
                 <p className="text-sm text-slate-500">{lead.phone || lead.email || "No contact info"}</p>
                 <p className="mt-1 text-xs text-slate-400">{lead.nextFollowUpAt ? formatDateTime(lead.nextFollowUpAt) : "No date"}</p>
               </div>
-            )) : <EmptyState title="Nothing scheduled for today" description="As follow-ups are assigned, they’ll appear here for quick action." />}
+            )) : <EmptyState title="Nothing scheduled for today" description="" />}
           </div>
         </SectionCard>
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
         <SectionCard>
-          <SectionTitle title="Upcoming jobs" description="What’s already booked and on the calendar." action={<Link href="/jobs" className="text-sm text-blue-700 hover:text-blue-800">View jobs</Link>} />
+          <SectionTitle title="Upcoming jobs" action={<Link href="/jobs" className="text-sm text-blue-700 hover:text-blue-800">View jobs</Link>} />
           <div className="mt-6 space-y-3">
             {upcomingJobs.length ? upcomingJobs.map((job) => (
               <Link key={job.id} href={`/jobs/${job.id}`} className="flex flex-col gap-3 rounded-[22px] bg-slate-50 p-4 transition hover:bg-slate-100 sm:flex-row sm:items-center sm:justify-between">
@@ -178,7 +174,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="text-sm text-slate-700">{formatCurrency(job.finalCents ?? job.quotedCents)}</div>
               </Link>
-            )) : <EmptyState title="No jobs booked yet" description="Convert a lead into a job from the Leads page and it’ll show up here automatically." />}
+            )) : <EmptyState title="No jobs booked yet" description="" />}
           </div>
         </SectionCard>
 
@@ -192,7 +188,6 @@ export default async function DashboardPage() {
               </div>
               <div className="rounded-[22px] bg-slate-50 p-4">
                 <p className="text-sm text-slate-500">Recommended next step</p>
-                <p className="mt-2 text-sm text-slate-700">Quote builder and invoice flow will make this feel much closer to a full production CRM.</p>
               </div>
             </div>
           </SectionCard>

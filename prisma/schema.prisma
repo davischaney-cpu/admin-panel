@@ -8,39 +8,41 @@ datasource db {
 }
 
 model User {
-  id                   String   @id @default(cuid())
-  clerkUserId          String   @unique
-  email                String   @unique
+  id                   String        @id @default(cuid())
+  clerkUserId          String        @unique
+  email                String        @unique
   name                 String?
-  role                 Role     @default(VIEWER)
-  stripeCustomerId     String?  @unique
-  stripeSubscriptionId String?  @unique
-  billingPlan          BillingPlan @default(FREE)
-  notifyEmail          Boolean  @default(true)
-  notifySms            Boolean  @default(false)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  role                 Role          @default(VIEWER)
+  stripeCustomerId     String?       @unique
+  stripeSubscriptionId String?       @unique
+  billingPlan          BillingPlan   @default(FREE)
+  notifyEmail          Boolean       @default(true)
+  notifySms            Boolean       @default(false)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  messagesCreated      Message[]
 }
 
 model Lead {
-  id             String          @id @default(cuid())
-  fullName       String
-  company        String?
-  email          String?
-  phone          String?
-  serviceType    String
-  source         LeadSource      @default(WEBSITE)
-  status         LeadStatus      @default(NEW)
-  urgency        LeadUrgency     @default(MEDIUM)
-  location       String?
-  estimatedCents Int?
-  notes          String?
-  nextFollowUpAt DateTime?
+  id              String          @id @default(cuid())
+  fullName        String
+  company         String?
+  email           String?
+  phone           String?
+  serviceType     String
+  source          LeadSource      @default(WEBSITE)
+  status          LeadStatus      @default(NEW)
+  urgency         LeadUrgency     @default(MEDIUM)
+  location        String?
+  estimatedCents  Int?
+  notes           String?
+  nextFollowUpAt  DateTime?
   lastContactedAt DateTime?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  jobs           Job[]
-  activityEvents ActivityEvent[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  jobs            Job[]
+  activityEvents  ActivityEvent[]
+  messages        Message[]
 
   @@index([status])
   @@index([nextFollowUpAt])
@@ -48,39 +50,66 @@ model Lead {
 }
 
 model Job {
-  id              String          @id @default(cuid())
-  leadId          String?
-  title           String
-  serviceType     String
-  status          JobStatus       @default(SCHEDULED)
-  scheduledFor    DateTime?
-  address         String?
-  quotedCents     Int?
-  finalCents      Int?
-  quoteSubtotalCents Int? 
-  quoteTaxCents   Int?
+  id                 String          @id @default(cuid())
+  leadId             String?
+  title              String
+  serviceType        String
+  status             JobStatus       @default(SCHEDULED)
+  scheduledFor       DateTime?
+  address            String?
+  quotedCents        Int?
+  finalCents         Int?
+  quoteSubtotalCents Int?
+  quoteTaxCents      Int?
   quoteDiscountCents Int?
-  quoteTotalCents Int?
-  quoteStatus     QuoteStatus     @default(DRAFT)
-  quotedAt        DateTime?
-  quoteApprovedAt DateTime?
-  invoiceStatus   InvoiceStatus   @default(NOT_SENT)
-  invoiceSentAt   DateTime?
-  invoicePaidAt   DateTime?
-  invoiceDueAt    DateTime?
-  invoiceMemo     String?
-  notes           String?
-  completedAt     DateTime?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  lead            Lead?           @relation(fields: [leadId], references: [id], onDelete: SetNull)
-  activityEvents  ActivityEvent[]
-  quoteItems      QuoteItem[]
+  quoteTotalCents    Int?
+  quoteStatus        QuoteStatus     @default(DRAFT)
+  quotedAt           DateTime?
+  quoteApprovedAt    DateTime?
+  invoiceStatus      InvoiceStatus   @default(NOT_SENT)
+  invoiceSentAt      DateTime?
+  invoicePaidAt      DateTime?
+  invoiceDueAt       DateTime?
+  invoiceMemo        String?
+  notes              String?
+  completedAt        DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  lead               Lead?           @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  activityEvents     ActivityEvent[]
+  quoteItems         QuoteItem[]
+  messages           Message[]
 
   @@index([status])
   @@index([scheduledFor])
   @@index([quoteStatus])
   @@index([invoiceStatus])
+}
+
+model Message {
+  id              String           @id @default(cuid())
+  leadId          String?
+  jobId           String?
+  createdByUserId String?
+  channel         MessageChannel
+  direction       MessageDirection @default(OUTBOUND)
+  status          MessageStatus    @default(PENDING)
+  to              String
+  from            String?
+  subject         String?
+  body            String
+  providerId      String?
+  error           String?
+  sentAt          DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  lead            Lead?            @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  job             Job?             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdByUser   User?            @relation(fields: [createdByUserId], references: [id], onDelete: SetNull)
+
+  @@index([leadId, createdAt])
+  @@index([jobId, createdAt])
+  @@index([status, createdAt])
 }
 
 model ActivityEvent {
@@ -175,4 +204,20 @@ enum BillingPlan {
   STARTER
   PRO
   TEAM
+}
+
+enum MessageChannel {
+  EMAIL
+  SMS
+}
+
+enum MessageDirection {
+  OUTBOUND
+  INBOUND
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  FAILED
 }

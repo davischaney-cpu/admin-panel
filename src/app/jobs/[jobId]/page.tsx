@@ -4,6 +4,8 @@ import { ActivityTimeline } from "@/components/activity-timeline";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { InvoiceBuilder } from "@/components/invoice-builder";
 import { JobEditForm } from "@/components/job-edit-form";
+import { MessageComposer } from "@/components/message-composer";
+import { MessageHistory } from "@/components/message-history";
 import { QuoteActions } from "@/components/quote-actions";
 import { QuoteBuilder } from "@/components/quote-builder";
 import { UnauthorizedState } from "@/components/unauthorized-state";
@@ -34,6 +36,7 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
       lead: true,
       quoteItems: { orderBy: { position: "asc" } },
       activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 },
+      messages: { orderBy: [{ createdAt: "desc" }], take: 10 },
     },
   });
 
@@ -131,9 +134,11 @@ export default async function JobDetailPage({ params }: JobDetailPageProps) {
           />
 
           <ActivityTimeline title="Job activity" items={job.activityEvents} />
+          <MessageHistory items={job.messages} />
         </div>
 
         <aside className="space-y-6">
+          <MessageComposer leadId={job.leadId} jobId={job.id} email={job.lead?.email} phone={job.lead?.phone} label={job.title} />
           {hasPermission("editJobs") ? (
             <JobEditForm
               jobId={job.id}

@@ -5,6 +5,8 @@ import { CreateJobFromLeadButton } from "@/components/create-job-from-lead-butto
 import { DashboardShell } from "@/components/dashboard-shell";
 import { LeadFollowUpActions } from "@/components/lead-follow-up-actions";
 import { LeadStatusActions } from "@/components/lead-status-actions";
+import { MessageComposer } from "@/components/message-composer";
+import { MessageHistory } from "@/components/message-history";
 import { UnauthorizedState } from "@/components/unauthorized-state";
 import { getAdminContext } from "@/lib/admin";
 import { db } from "@/lib/db";
@@ -41,6 +43,7 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
     include: {
       jobs: { orderBy: [{ scheduledFor: "asc" }, { createdAt: "desc" }] },
       activityEvents: { orderBy: [{ createdAt: "desc" }], take: 20 },
+      messages: { orderBy: [{ createdAt: "desc" }], take: 10 },
     },
   });
 
@@ -135,9 +138,11 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           </div>
 
           <ActivityTimeline title="Lead activity" items={lead.activityEvents} />
+          <MessageHistory items={lead.messages} />
         </div>
 
         <aside className="space-y-6">
+          <MessageComposer leadId={lead.id} email={lead.email} phone={lead.phone} label={lead.fullName} />
           <div className="rounded-[30px] border border-blue-200 bg-[#e8f1ff] p-6 shadow-[0_12px_40px_rgba(15,23,42,0.05)]">
             <h3 className="text-lg font-semibold text-slate-900">Actions</h3>
             <div className="mt-4 space-y-4">

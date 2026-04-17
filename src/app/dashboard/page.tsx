@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { BillingCard } from "@/components/billing-card";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { DemoDataControls } from "@/components/demo-data-controls";
 import { NotificationsCard } from "@/components/notifications-card";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
 import { EmptyState, PageHeader, PrimaryButton, SectionCard, SectionTitle, SecondaryButton, StatCard } from "@/components/ui";
@@ -193,7 +192,6 @@ export default async function DashboardPage() {
           </SectionCard>
           {hasPermission("manageBilling") ? <BillingCard /> : null}
           {hasPermission("manageNotifications") ? <NotificationsCard /> : null}
-          {hasPermission("useDemoTools") ? <DemoDataControls /> : null}
         </div>
       </div>
     </DashboardShell>

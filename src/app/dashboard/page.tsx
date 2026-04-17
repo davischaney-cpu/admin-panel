@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BillingCard } from "@/components/billing-card";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { NotificationsCard } from "@/components/notifications-card";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
@@ -190,7 +189,6 @@ export default async function DashboardPage() {
               </div>
             </div>
           </SectionCard>
-          {hasPermission("manageBilling") ? <BillingCard /> : null}
           {hasPermission("manageNotifications") ? <NotificationsCard /> : null}
         </div>
       </div>
